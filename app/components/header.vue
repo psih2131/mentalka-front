@@ -51,7 +51,7 @@
             <a href="" class="mob-meny__links-anchor">Контакты</a>
           </li>
           <li class="mob-meny__links-item">
-            <a href="" class="mob-meny__links-anchor">Отзывы</a>
+            <NuxtLink to="/reviews" class="mob-meny__links-anchor">Отзывы</NuxtLink>
           </li>
         </ul>
       </nav>
@@ -412,7 +412,7 @@
                   <a href="">Контакты</a>
                 </li>
                 <li class="header__header-nav-element">
-                  <a href="">Отзывы</a>
+                  <NuxtLink to="/reviews" class="header__nav-link">Отзывы</NuxtLink>
                 </li>
               </ul>
             </nuv>
