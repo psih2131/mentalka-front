@@ -36,7 +36,7 @@
             </div>
           </li>
           <li class="mob-meny__links-item">
-            <a href="" class="mob-meny__links-anchor">Цены</a>
+            <NuxtLink to="/prices" class="mob-meny__links-anchor">Цены</NuxtLink>
           </li>
           <li class="mob-meny__links-item">
             <a href="" class="mob-meny__links-anchor">О клинике</a>
@@ -397,7 +397,7 @@
                   </ul>
                 </li>
                 <li class="header__header-nav-element">
-                  <a href="">Цены</a>
+                  <NuxtLink to="/prices" class="header__nav-link">Цены</NuxtLink>
                 </li>
                 <li class="header__header-nav-element">
                   <a href="">О клинике</a>
