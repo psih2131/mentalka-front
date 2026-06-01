@@ -1,10 +1,24 @@
-@import "vars";
-@import "fonts";
-// @import "mixins";
+@import "./vars";
+@import "./fonts";
+// @import "./mixins";
 
-@import "sourse";
+@import "./sourse";
 
-@import "header";
-@import "footer";
+/* sections */
 
+@import "./header";
+@import "./footer";
+
+/* components */
+@import "./components/btn-ctr-v1";
+@import "./components/btn-ctr-v2";
+@import "./components/btn-ctr-v3";
+@import "./components/hero-sec";
+@import "./components/specialist-card";
+@import "./components/banner-v1";
+@import "./components/btn-ctr-v4";
+
+/* pages */
 @import "home-page";
+@import "specialists-page";
+@import "specialist-single";
