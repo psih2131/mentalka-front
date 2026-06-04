@@ -42,7 +42,7 @@
             <a href="" class="mob-meny__links-anchor">О клинике</a>
           </li>
           <li class="mob-meny__links-item">
-            <a href="" class="mob-meny__links-anchor">Блог</a>
+            <NuxtLink to="/blog" class="mob-meny__links-anchor">Блог</NuxtLink>
           </li>
           <li class="mob-meny__links-item">
             <a href="" class="mob-meny__links-anchor">Информация</a>
@@ -403,7 +403,7 @@
                   <a href="">О клинике</a>
                 </li>
                 <li class="header__header-nav-element">
-                  <a href="">Блог</a>
+                  <NuxtLink to="/blog" class="header__nav-link">Блог</NuxtLink>
                 </li>
                 <li class="header__header-nav-element">
                   <a href="">Информация</a>

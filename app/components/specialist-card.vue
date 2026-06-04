@@ -20,7 +20,7 @@
 
         <div class="specialist-card__bottom-info">
             <BtnCtrV2 :titleBtn="'Записаться'" />
-            <BtnCtrV3 :titleBtn="'Подробнее'" :id="specialistData.id" />
+            <BtnCtrV3 :titleBtn="'Подробнее'"  :link="`/specialists/${specialistData.id}`" />
         </div>
     </div>
 </template>

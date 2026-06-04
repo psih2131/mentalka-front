@@ -1,5 +1,5 @@
 <template>
-    <NuxtLink :to="`/specialists/${id}`" class="btn-ctr-v3" v-if="id">
+    <NuxtLink :to="link" class="btn-ctr-v3" v-if="link">
         <span class="btn-ctr-v3__text">{{ titleBtn }}</span>
 
         <span class="btn-ctr-v3__ar">
@@ -26,6 +26,10 @@ const props = defineProps({
     },
     id: {
         type: Number,
+        required: true
+    },
+    link: {
+        type: String,
         required: true
     }
 })
