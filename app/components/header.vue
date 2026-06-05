@@ -45,7 +45,7 @@
             <NuxtLink to="/blog" class="mob-meny__links-anchor">Блог</NuxtLink>
           </li>
           <li class="mob-meny__links-item">
-            <a href="" class="mob-meny__links-anchor">Информация</a>
+            <NuxtLink to="/inform" class="mob-meny__links-anchor">Информация</NuxtLink>
           </li>
           <li class="mob-meny__links-item">
             <a href="" class="mob-meny__links-anchor">Контакты</a>
@@ -406,7 +406,7 @@
                   <NuxtLink to="/blog" class="header__nav-link">Блог</NuxtLink>
                 </li>
                 <li class="header__header-nav-element">
-                  <a href="">Информация</a>
+                  <NuxtLink to="/inform" class="header__nav-link">Информация</NuxtLink>
                 </li>
                 <li class="header__header-nav-element">
                   <a href="">Контакты</a>
