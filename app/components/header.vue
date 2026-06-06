@@ -48,7 +48,7 @@
             <NuxtLink to="/inform" class="mob-meny__links-anchor">Информация</NuxtLink>
           </li>
           <li class="mob-meny__links-item">
-            <a href="" class="mob-meny__links-anchor">Контакты</a>
+            <NuxtLink to="/contacts" class="mob-meny__links-anchor">Контакты</NuxtLink>
           </li>
           <li class="mob-meny__links-item">
             <NuxtLink to="/reviews" class="mob-meny__links-anchor">Отзывы</NuxtLink>
@@ -409,7 +409,7 @@
                   <NuxtLink to="/inform" class="header__nav-link">Информация</NuxtLink>
                 </li>
                 <li class="header__header-nav-element">
-                  <a href="">Контакты</a>
+                  <NuxtLink to="/contacts" class="header__nav-link">Контакты</NuxtLink>
                 </li>
                 <li class="header__header-nav-element">
                   <NuxtLink to="/reviews" class="header__nav-link">Отзывы</NuxtLink>

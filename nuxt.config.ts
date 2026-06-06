@@ -1,3 +1,4 @@
+/// <reference types="vue-yandex-maps/nuxt" />
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -25,5 +26,21 @@ export default defineNuxtConfig({
 
   ssr: true,
   css: ['~/assets/scss/main.scss'],
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', 'vue-yandex-maps/nuxt'],
+
+  yandexMaps: {
+    apikey: 'af5a38a2-5bf8-44de-bfbe-b30e278e9df4',
+  },
+
+  build: {
+    transpile: ['vue-yandex-maps'],
+  },
+
+  vite: {
+    optimizeDeps: {
+      exclude: ['vue-yandex-maps'],
+    },
+  },
+
+
 })
