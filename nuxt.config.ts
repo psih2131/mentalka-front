@@ -26,7 +26,7 @@ export default defineNuxtConfig({
 
   ssr: true,
   css: ['~/assets/scss/main.scss'],
-  modules: ['@pinia/nuxt', 'vue-yandex-maps/nuxt'],
+  modules: ['@pinia/nuxt', 'vue-yandex-maps/nuxt', 'nuxt-swiper'],
 
   yandexMaps: {
     apikey: 'af5a38a2-5bf8-44de-bfbe-b30e278e9df4',
