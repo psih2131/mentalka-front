@@ -21,6 +21,9 @@
             <div class="mob-meny__acc-panel">
               <ul class="mob-meny__acc-list">
                 <li class="mob-meny__acc-row">
+                  <NuxtLink to="/services" class="mob-meny__acc-link">Все услуги</NuxtLink>
+                </li>
+                <li class="mob-meny__acc-row">
                   <a href="" class="mob-meny__acc-link">Психотерапия</a>
                 </li>
                 <li class="mob-meny__acc-row">
@@ -377,11 +380,14 @@
                 <li
                   class="header__header-nav-element header__header-nav-element--dropdown"
                 >
-                  <a href="" class="header__nav-link">
+                  <a  class="header__nav-link">
                     Услуги
                     <span class="header__nav-arrow" aria-hidden="true"></span>
                   </a>
                   <ul class="header__submenu">
+                    <li class="header__submenu-item">
+                      <NuxtLink to="/services" class="header__nav-link">Все услуги</NuxtLink>
+                    </li>
                     <li class="header__submenu-item">
                       <a href="">Психотерапия</a>
                     </li>
