@@ -31,6 +31,9 @@
     .service-cat{
         margin-bottom: 20px;
     }
+    .service-cat:last-child{
+        margin-bottom: 0;
+    }
 }
 .service-cat{
     padding: 24px 30px;
@@ -169,6 +172,74 @@ font-family: $secondFonts;
         background: $green1;
         color: $white;
     }
+}
+.services-prices-sec__nav-mob{
+    display: none;
+    position: relative;
+}
+.services-prices-sec__nav-mob-trigger{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 30px;
+    background: #F6F6F6;
+    border: 1px solid $green1;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 90%;
+    letter-spacing: -0.03em;
+    color: $black;
+    cursor: pointer;
+}
+.services-prices-sec__nav-mob-icon{
+    display: flex;
+    flex-shrink: 0;
+    line-height: 0;
+    transition: transform 0.2s ease;
+
+    svg{
+        display: block;
+    }
+}
+.services-prices-sec__nav-mob--open{
+    .services-prices-sec__nav-mob-icon{
+        transform: rotate(180deg);
+    }
+}
+.services-prices-sec__nav-mob-list{
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 5;
+    margin: 0;
+    padding: 8px;
+    list-style: none;
+    background: #F6F6F6;
+    border: 1px solid $green1;
+    border-radius: 15px;
+}
+.services-prices-sec__nav-mob-item{
+    padding: 12px 16px;
+    border-radius: 100px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 90%;
+    letter-spacing: -0.03em;
+    color: $black;
+    cursor: pointer;
+
+    &.active,
+    &:hover{
+        background: $green1;
+        color: $white;
+    }
+}
+.services-prices-sec__nav-mob-wrapper{
+    display: none;
 }
 .services-prices-sec__content{
     margin-top: 40px;
@@ -623,4 +694,481 @@ margin-bottom: 20px;
             }
         }
     }
+}
+
+
+@media only screen and (max-width: 1360px) {
+
+}
+
+@media only screen and (max-width: 1280px) {
+    .services-hero-sec .hero-sec__bg-img{
+        width: 800px;
+    }
+}
+
+@media only screen and (max-width: 1240px) {
+    .services-cat-sec__title{
+        font-size: 30px;
+    }
+    .services-cat-sec{
+        padding-bottom: 80px;
+    }
+    .services-prices-sec__title{
+        font-size: 30px;
+    }
+
+    .services-prices-sec__nav-list{
+        column-gap: 15px;
+    }
+    .services-prices-sec__nav-item{
+        font-size: 16px;
+        padding: 12px 20px;
+    }
+    .services-prices-sec{
+        padding-bottom: 80px;
+    }
+    .price-service-card__data{
+        width: 440px
+    }
+    .service-cat{
+        border-radius: 15px;
+        padding: 15px 20px;
+    }
+    .service-cat__name{
+        font-size: 18px;
+    }
+    .service-cat__content-teg{
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+    .service-cat__content-btn-wrapper .btn-ctr-v2{
+        width: 280px;
+    }
+    .price-service-card{
+        border-radius: 15px;
+    }
+    .price-service-card__result{
+        border-radius: 15px;
+    }
+    .services-staps-sec__title{
+        font-size: 30px;
+    }
+    .services-staps-sec__item-name{
+        font-size: 20px;
+    }
+    .services-staps-sec__item-num{
+        font-size: 50px;
+        width: 90px;
+    }
+    .services-staps-sec__item-title{
+        width: 320px;
+    }
+    .services-staps-sec__item-text{
+        width: calc(100% - 320px - 50px);
+    }
+    .services-staps-sec__content{
+        border-radius: 15px;
+    }
+    .wo-long-item-v1{
+        border-radius: 15px;
+        width:  calc(33.33% - 10px);
+        height: 270px;
+    }
+    .wo-long-item-v1__img{
+        display: none;
+    }
+    .wo-long-item-v1__data{
+        width: 100%;
+    }
+    .wo-long-item-v1__title{
+        font-size: 20px;
+    }
+    .services-staps-sec__wo-long-row-clusteer{
+        width: calc(100% - 33.33% - 10px);
+    }
+    .wo-long-item-v2{
+        border-radius: 15px;
+
+        &:nth-child(1){
+            &::before{
+                width: 150px;
+                height: 150px;
+                top: 50px;
+                right: 6px;
+            }
+        }
+        &:nth-child(2){
+            &::before{
+                width: 180px;
+                height: 150px;
+                top: 50px;
+                right: -30px;
+            }
+        }
+    }
+    .wo-long-item-v2__title{
+        font-size: 20px;
+    }
+    .services-staps-sec{
+        padding-bottom: 80px;
+    }
+    .services-rules-sec__title{
+        font-size: 30px;
+    }
+    .services-rules-sec__content{
+        column-gap: 40px;
+    }
+    .services-rules-sec__col{
+        width: 260px;
+    }
+    .services-rules-sec__col-title{
+        font-size: 20px;
+    }
+    .services-rules-sec{
+        padding-bottom: 80px;
+    }
+
+}
+
+@media only screen and (max-width: 940px) {
+    .services-cat-sec__title{
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+    .services-prices-sec__title{
+        font-size: 28px;
+    }
+    .services-prices-sec__nav-item{
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+    .price-service-card__data{
+        width: 100%;
+    }
+    .price-service-card__price{
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .price-service-card__result{
+        width: 60%;
+        margin-bottom: 0;
+    }
+    .price-service-card__btn-row{
+        width: 40%;
+        flex-wrap: wrap;
+        padding-left: 30px;
+    }
+    .price-service-card__prices-list{
+        margin-bottom: 20px;
+    }
+    .services-rules-sec__col{
+        width: calc(50% - 20px);
+    }
+    .services-rules-sec__content{
+        justify-content: space-between;
+        column-gap: 0;
+        row-gap: 40px;
+    }
+
+}
+
+
+@media only screen and (max-width: 760px) {
+    .services-hero-sec .hero-sec__bg-img{
+        width: 630px;
+        transform: rotate(-138deg);
+        bottom: 130px;
+        top: auto;
+        right: -95px;
+    }
+
+    .services-cat-sec__title{
+        font-size: 22px;
+        margin-bottom: 20px;
+        span{
+            display: none;
+        }
+    }
+    .service-cat{
+        padding: 23px 20px 23px 30px;
+        border-radius: 10px;
+        
+    }
+    .service-cat__content-teg{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        border: none;
+        position: relative;
+        border-radius: 0;
+        font-size: 14px;
+        margin-bottom: 10px;
+        padding: 0;
+        padding-left: 17px;
+        &::before{
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 7px;
+            height: 7px;
+            background: $green1;
+            border-radius: 100px;
+        }
+
+        &:last-child{
+            margin-bottom: 0;
+        }
+    }
+    .service-cat__content-tegs{
+        row-gap: 0px;
+        column-gap: 0px;
+    }
+    .service-cat__content-btn-wrapper{
+        margin-top: 30px;
+
+        .btn-ctr-v2{
+            width: 263px;
+        }
+    }
+    .services-cat-sec{
+        padding-bottom: 70px;
+    }
+    .services-prices-sec__title{
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+    .services-prices-sec__text{
+        display: none;
+    }
+    .services-prices-sec__nav--desk{
+        display: none;
+    }
+    .services-prices-sec__nav-mob{
+        display: block;
+        width: 160px;
+    }
+    .services-prices-sec__nav-mob-wrapper{
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .services-prices-sec__nav-mob-wrapper{
+        margin-bottom: 0;
+    }
+    .services-prices-sec__content{
+        margin-top: 20px;
+    }
+    .price-service-card{
+        border-radius: 10px;
+        padding: 30px 0;
+
+        &::before{
+            width: 345px;
+            height: 515px;
+            left: auto;
+            top: auto;
+            right: 0;
+            bottom: 0;
+            background-image: url('../images/bg/price-card-bg-mob.png');
+        }
+    }
+    .price-service-card__header{
+        order: 3;
+        padding: 0 30px;
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
+    .price-service-card__list{
+        display: block;
+    }
+    .price-service-card__item{
+        padding-left: 17px;
+
+        margin-bottom: 10px;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 95%;
+        /* or 13px */
+        width: 100%;
+        letter-spacing: -0.01em;
+        
+        color: rgba(0, 0, 0, 0.5);
+        &:last-child{
+            margin-bottom: 0;
+        }
+
+        &::before{
+            width: 7px;
+            height: 7px;
+        }
+    }
+    .price-service-card__data{
+        padding: 0 30px;
+        margin-bottom: 20px;
+    }
+    .price-service-card__title{
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    .price-service-card__description {
+        p{
+            font-size: 14px;
+        }
+    }
+    .price-service-card__price{
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    .price-service-card__result{
+        width: 100%;
+        margin-bottom: 28px;
+        padding: 30px;
+        border-radius: 20px;
+    }
+    .price-service-card__result-title{
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    .price-service-card__result-subtitle{
+        font-size: 14px;
+    }
+    .price-service-card__btn-row{
+        width: 100%;
+        padding: 0 30px;
+        justify-content: space-between;
+        display: flex;
+    }
+    .price-service-card__btn-row .btn-ctr-v2{
+        width: 150px;
+    }
+    .price-service-card__prices-list{
+        margin-bottom: 0;
+    }
+    .services-prices-sec{
+        padding-bottom: 70px;
+    }
+    .services-staps-sec__title{
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+    .services-staps-sec__content{
+        border-radius: 10px;
+        padding: 0;
+    }
+    .services-staps-sec__item{
+        padding: 20px 20px 20px 30px;
+        flex-wrap: wrap;
+    }
+    .services-staps-sec__item-title{
+        flex-wrap: wrap;
+    }
+    .services-staps-sec__item-num{
+        width: 100%;
+        text-align: right;
+        font-size: 44px;
+        margin-bottom: 10px;
+    }
+    .services-staps-sec__item-name{
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    .services-staps-sec__item-text{
+        width: 100%;
+    }
+    .services-staps-sec__wo-long-row{
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    .wo-long-item-v1{
+        width: 100%;
+        height: 205px;
+        padding: 30px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+
+    .wo-long-item-v1::before{
+        width: 392px;
+        height: 205px;
+        bottom: 0;
+        right: 0;
+        left: auto;
+        top: auto;
+        transform: scaleX(-1) rotate(0);
+        top: 24px;
+        left: -17px;
+    }
+    .wo-long-item-v1__title{
+        font-size: 18px;
+    }
+    .services-staps-sec__item-name{
+        width: 100%;
+        padding-right: 50px;
+    }
+    .services-staps-sec__wo-long-row-clusteer{
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 0;
+        row-gap: 20px;
+    }
+    .wo-long-item-v2{
+        width: 100%;
+        height: 205px;
+        border-radius: 10px;
+
+        &:nth-child(1){
+            &::before{
+                width: 133px;
+                height: 128px;
+                top: 7px;
+                right: 6px;
+            }
+        }
+        &:nth-child(2){
+            &::before{
+                width: 230px;
+                height: 180px;
+                top: 11px;
+                right: -38px;
+            }
+        }
+    }
+    .wo-long-item-v2__title{
+        font-size: 18px;
+    }
+    .services-staps-sec{
+        padding-bottom: 70px;
+    }
+    .services-rules-sec__title{
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+    .services-rules-sec__col{
+        width: 100%;
+    }
+    .services-rules-sec__col-title{
+        font-size: 18px;
+        margin-bottom: 15px;
+        padding-right: 50px;
+    }
+    .services-rules-sec__col-text{
+        font-size: 14px;
+        padding-right: 50px;
+    }
+    .services-rules-sec__col-btn-row .btn-ctr-v2{
+        width: 180px;
+    }
+    .services-rules-sec__content{
+        row-gap: 30px;
+    }
+    .services-rules-sec{
+        padding-bottom: 20px;
+    }
+}
+
+@media only screen and (max-width: 360px) {
+
 }

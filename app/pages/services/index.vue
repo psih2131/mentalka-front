@@ -48,19 +48,50 @@
                 <b>консультации специалистов и программы терапии в частной психиатрической клинике</b>
             </h2>
             <p class="services-prices-sec__text">Мы оказываем помощь при самых разных психических расстройствах — от легких невротических проблем до серьезных психозов и шизофрении. Расстройства психики могут принимать различные формы, и в каждом случае наши специалисты подбирают оптимальное решение.</p>
-            <nav class="services-prices-sec__nav">
+            <nav class="services-prices-sec__nav services-prices-sec__nav--desk">
                 <ul class="services-prices-sec__nav-list">
                     <li
                         v-for="item in priceNavItems"
                         :key="item.id"
                         class="services-prices-sec__nav-item"
                         :class="{ active: activePriceCategory === item.id }"
-                        @click="activePriceCategory = item.id"
+                        @click="selectPriceCategory(item.id)"
                     >
                         {{ item.title }}
                     </li>
                 </ul>
             </nav>
+            <div class="services-prices-sec__nav-mob-wrapper">
+                <div
+                    class="services-prices-sec__nav-mob"
+                    :class="{ 'services-prices-sec__nav-mob--open': isNavOpen }"
+                >
+                    <button
+                        type="button"
+                        class="services-prices-sec__nav-mob-trigger"
+                        :aria-expanded="isNavOpen"
+                        @click="isNavOpen = !isNavOpen"
+                    >
+                        <span class="services-prices-sec__nav-mob-label">{{ activePriceCategoryTitle }}</span>
+                        <span class="services-prices-sec__nav-mob-icon" aria-hidden="true">
+                            <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10.3516 0.355469L5.35156 5.35547L0.351563 0.355469" stroke="black" />
+                            </svg>
+                        </span>
+                    </button>
+                    <ul v-show="isNavOpen" class="services-prices-sec__nav-mob-list">
+                        <li
+                            v-for="item in priceNavItems"
+                            :key="item.id"
+                            class="services-prices-sec__nav-mob-item"
+                            :class="{ active: activePriceCategory === item.id }"
+                            @click="selectPriceCategory(item.id)"
+                        >
+                            {{ item.title }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
             <div class="services-prices-sec__content">
                 <PriceServiceCard
@@ -345,6 +376,17 @@
     ];
 
     const activePriceCategory = ref('all');
+    const isNavOpen = ref(false);
+
+    const activePriceCategoryTitle = computed(() => {
+        const item = priceNavItems.find((navItem) => navItem.id === activePriceCategory.value);
+        return item ? item.title : '';
+    });
+
+    const selectPriceCategory = (id) => {
+        activePriceCategory.value = id;
+        isNavOpen.value = false;
+    };
 
     const priceServices = [
         {
