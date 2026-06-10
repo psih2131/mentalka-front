@@ -83,22 +83,22 @@
               <a href="" class="footer__middle-nav-link">О клинике</a>
             </li>
             <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link">Специалисты</a>
+              <NuxtLink to="/specialists" class="footer__middle-nav-link">Специалисты</NuxtLink>
             </li>
             <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link">Услуги</a>
+              <NuxtLink to="/services" class="footer__middle-nav-link">Услуги</NuxtLink>
             </li>
             <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link">Цены</a>
+              <NuxtLink to="/prices" class="footer__middle-nav-link">Цены</NuxtLink>
             </li>
             <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link">Отзывы</a>
+              <NuxtLink to="/reviews" class="footer__middle-nav-link">Отзывы</NuxtLink>
             </li>
             <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link">Статьи</a>
+              <NuxtLink to="/blog" class="footer__middle-nav-link">Статьи</NuxtLink>
             </li>
             <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link">Карта сайта</a>
+              <NuxtLink to="/sitemap-page" class="footer__middle-nav-link">Карта сайта</NuxtLink>
             </li>
           </ul>
         </nav>
