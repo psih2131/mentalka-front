@@ -389,16 +389,16 @@
                       <NuxtLink to="/services" class="header__nav-link">Все услуги</NuxtLink>
                     </li>
                     <li class="header__submenu-item">
-                      <a href="">Психотерапия</a>
+                      <NuxtLink to="/services/psycho-therapy" class="header__nav-link">Психотерапия</NuxtLink>
                     </li>
                     <li class="header__submenu-item">
-                      <a href="">Психиатрическая помощь</a>
+                      <NuxtLink to="/services/psychiatric-help" class="header__nav-link">Психиатрическая помощь</NuxtLink>
                     </li>
                     <li class="header__submenu-item">
-                      <a href="">Семейная терапия</a>
+                      <NuxtLink to="/services/family-therapy" class="header__nav-link">Семейная терапия</NuxtLink>
                     </li>
                     <li class="header__submenu-item">
-                      <a href="">Диагностика</a>
+                      <NuxtLink to="/services/diagnosis" class="header__nav-link">Диагностика</NuxtLink>
                     </li>
                   </ul>
                 </li>
