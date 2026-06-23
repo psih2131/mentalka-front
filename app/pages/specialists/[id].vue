@@ -3,27 +3,30 @@
         <div class="container">
             <div class="specialist-hero-sec__left-col">
                 <div class="specialist-hero-sec__img">
-                    <img src="../../assets/images/specialists/spec-2.jpg" alt="specialist-img">
+                    <img
+                        v-if="doctor.photo"
+                        :src="getStrapiMediaUrl(doctor.photo)"
+                        :alt="doctor.name || 'specialist-img'"
+                    >
                 </div>
                 <h1 class="specialist-hero-sec__doctor-name">
-                    Лапук Дарья Дмитриевна
+                    {{ doctor.name }}
                 </h1>
                 <p class="specialist-hero-sec__doctor-description">
-                    Оказывает психиатрическую помощь взрослым пациентам от 18 лет. Работает с тяжёлыми 
-                    и хроническими психическими расстройствами, используя современные доказательные методы лечения.
+                    {{ doctor.small_descriotion }}
                 </p>
             </div>
             <div class="specialist-hero-sec__right-col">
                 <div class="specialist-hero-sec__doctor-info-block doctor-info-block">
                     <div class="doctor-info-block__type">
-                        Врач-психиатр
+                        {{ doctor.specialization }}
                     </div>
                     <div class="doctor-info-block__row-data">
                         <div class="doctor-info-block__element-data">
                             <p class="doctor-info-block__element-data-title">Формат приёма</p>
                             <ul class="doctor-info-block__element-data-list">
                                 <li class="doctor-info-block__element-data-item">
-                                    <p class="doctor-info-block__element-data-item-value">В клинике</p>
+                                    <p class="doctor-info-block__element-data-item-value">{{ doctor.reception_format }}</p>
                                 </li>
                             </ul>
                         </div>
@@ -32,19 +35,21 @@
                             <p class="doctor-info-block__element-data-title">Пациенты</p>
                             <ul class="doctor-info-block__element-data-list">
                                 <li class="doctor-info-block__element-data-item">
-                                    <p class="doctor-info-block__element-data-item-value">Взрослые</p>
+                                    <p class="doctor-info-block__element-data-item-value">{{ doctor.patients }}</p>
                                 </li>
                             </ul>
                         </div>
 
                         <div class="doctor-info-block__element-data doctor-info-block__element-data--price  ">
                             <p class="doctor-info-block__element-data-title">Стоимость</p>
-                            <ul class="doctor-info-block__element-data-list">
-                                <li class="doctor-info-block__element-data-item">
-                                    <p class="doctor-info-block__element-data-item-value">Первичный приём (60 мин.) - 4 500 руб.</p>
-                                </li>
-                                <li class="doctor-info-block__element-data-item">
-                                    <p class="doctor-info-block__element-data-item-value">Повторный приём (30 мин.) - 3 000 руб.
+                            <ul v-if="doctor.service_price?.length" class="doctor-info-block__element-data-list">
+                                <li
+                                    v-for="(priceItem, priceIndex) in doctor.service_price"
+                                    :key="priceItem.id ?? priceIndex"
+                                    class="doctor-info-block__element-data-item"
+                                >
+                                    <p class="doctor-info-block__element-data-item-value">
+                                        {{ priceItem.name_service }} - {{ priceItem.price }}
                                     </p>
                                 </li>
                             </ul>
@@ -130,35 +135,34 @@
                     <div class="doctor-about-block__tabs-wrapper">
                         <div class="doctor-about-block__tab" :class="{ 'active': tabCurrent === 0 }">
                             <h2 class="doctor-about-block__tab-title">О враче и подход к лечению</h2>
-                            <div class="doctor-about-block__tab-text-wrapper">
-                                <p>Дарья Дмитриевна Лапук — врач-психиатр с 3-летним опытом работы в психиатрической клинике. Оказывает комплексную психиатрическую помощь взрослым пациентам от 18 лет. Специализируется на расстройствах шизофренического спектра, тревожных и фобических нарушениях, расстройствах личности, аффективных расстройствах (биполярное расстройство, депрессия), а также деменции. В практике применяет современные доказательные подходы, сочетая фармакотерапию с психотерапевтической поддержкой.</p>
-                                <p>Дарья Дмитриевна убеждена, что комплексный подход позволяет добиться наилучших результатов даже при тяжёлых психических заболеваниях. Она тщательно обследует каждого пациента, при необходимости назначает дополнительные исследования и динамически отслеживает изменения состояния. При лечении врач опирается на мультидисциплинарное взаимодействие: при случае привлекает психологов или других специалистов, вовлекает родственников в реабилитацию. Цель доктора — не только купировать болезненные симптомы, но и помочь человеку вернуть уверенность в себе, поддержку близких и способность вести активную жизнь.</p>
-                            </div>
+                            <div
+                                class="doctor-about-block__tab-text-wrapper"
+                                v-html="renderMarkdown(doctor.full_description)"
+                            ></div>
                         </div>
 
                         <div class="doctor-about-block__tab" :class="{ 'active': tabCurrent === 1 }">
                             <h2 class="doctor-about-block__tab-title">Специализация</h2>
                             <div class="doctor-about-block__tab-text-wrapper">
-                                <p>Специализируется на лечении расстройств шизофренического спектра, аффективных 
-                                    и тревожных расстройств. Работает по современным доказательным стандартам психиатрии.</p>
+                                <p>{{ doctor.full_specialization }}</p>
                             </div>
 
-                            <div class="doctor-about-block__columb-wrapper">
+                            <div v-if="doctor.Diseases_item?.length" class="doctor-about-block__columb-wrapper">
                                 <h3 class="doctor-about-block__columb-title">Болезни</h3>
 
                                 <ul class="doctor-about-block__columb-list doctor-about-block__columb-list--two-coll">
-                                    <li>Расстройства шизофренического спектра</li>
-                                    <li>Биполярное расстройство</li>
-                                    <li>Депрессия</li>
-                                    <li>Тревожные и фобические расстройства</li>
-                                    <li>Расстройства личности</li>
-                                    <li>Деманеция</li>
+                                    <li
+                                        v-for="(disease, diseaseIndex) in doctor.Diseases_item"
+                                        :key="disease.id ?? diseaseIndex"
+                                    >
+                                        {{ disease.name_diseases }}
+                                    </li>
                                 </ul>
                             </div>
 
-                            <div class="doctor-about-block__experience-wrapper">
+                            <div v-if="experienceText" class="doctor-about-block__experience-wrapper">
                                 <h3 class="doctor-about-block__experience-title">Общий стаж</h3>
-                                <p class="doctor-about-block__experience-text">3 года</p>
+                                <p class="doctor-about-block__experience-text">{{ experienceText }}</p>
                             </div>
                         </div>
 
@@ -166,13 +170,14 @@
                             <h2 class="doctor-about-block__tab-title">Услуги врача</h2>
              
 
-                            <div class="doctor-about-block__columb-wrapper">
+                            <div v-if="doctor.doc_service_list_full?.length" class="doctor-about-block__columb-wrapper">
                                 <ul class="doctor-about-block__columb-list ">
-                                    <li>Первичная консультация</li>
-                                    <li>Повторный приём</li>
-                                    <li>Подбор медикаментозной терапии</li>
-                                    <li>ТПсихообразование</li>
-                                    <li>Составление плана лечения</li>
+                                    <li
+                                        v-for="(service, serviceIndex) in doctor.doc_service_list_full"
+                                        :key="service.id ?? serviceIndex"
+                                    >
+                                        {{ service.name_service }}
+                                    </li>
                                 </ul>
                             </div>
                
@@ -182,11 +187,14 @@
                         <div class="doctor-about-block__tab" :class="{ 'active': tabCurrent === 3 }">
                             <h2 class="doctor-about-block__tab-title">Образование и квалификация</h2>
 
-                            <div class="doctor-about-block__columb-wrapper">
+                            <div v-if="doctor.education_and_qualifications_list_item?.length" class="doctor-about-block__columb-wrapper">
                                 <ul class="doctor-about-block__columb-list ">
-                                    <li>Диплом врача по специальности «Лечебное дело»</li>
-                                    <li>Профессиональная специализация «Психиатрия»
-                                    </li> 
+                                    <li
+                                        v-for="(educationItem, educationIndex) in doctor.education_and_qualifications_list_item"
+                                        :key="educationItem.id ?? educationIndex"
+                                    >
+                                        {{ educationItem.text }}
+                                    </li>
                                 </ul>
                             </div>
 
@@ -206,7 +214,88 @@
 <script setup>
 import BtnCtrV1 from "@/components/btn-ctr-v1.vue";
 import BannerV1 from "@/components/banner-v1.vue";
+import MarkdownIt from 'markdown-it';
 
+const md = new MarkdownIt();
+
+const config = useRuntimeConfig();
+const strapiUrl = config.public.strapiUrl;
+const route = useRoute();
+const slug = route.params.id;
+
+const { data: doctorResponse } = await useFetch(`${strapiUrl}/api/doctors`, {
+    query: {
+        'filters[slug][$eq]': slug,
+        'populate[photo]': true,
+        'populate[service_price]': true,
+        'populate[Diseases_item]': true,
+        'populate[doc_service_list_full]': true,
+        'populate[education_and_qualifications_list_item]': true,
+        'populate[Seo][populate][shareImage]': true,
+        'populate[Seo][populate][twitterImage]': true,
+    },
+});
+
+const doctorItem = doctorResponse.value?.data?.[0];
+
+if (!doctorItem) {
+    throw createError({
+        statusCode: 404,
+        statusMessage: 'Специалист не найден',
+    });
+}
+
+const doctor = doctorItem.attributes ?? doctorItem;
+
+function getStrapiMediaUrl(media) {
+    if (!media) {
+        return null;
+    }
+
+    const url = media.url ?? media.data?.url ?? media.attributes?.url;
+
+    if (!url) {
+        return null;
+    }
+
+    return url.startsWith('http') ? url : `${strapiUrl}${url}`;
+}
+
+function renderMarkdown(text) {
+    if (!text) {
+        return '';
+    }
+
+    return md.render(text);
+}
+
+function formatExperienceYears(years) {
+    if (years === null || years === undefined || years === '') {
+        return '';
+    }
+
+    const count = Math.floor(Number(years));
+
+    if (Number.isNaN(count)) {
+        return '';
+    }
+
+    const mod10 = count % 10;
+    const mod100 = count % 100;
+    let word = 'лет';
+
+    if (mod100 >= 11 && mod100 <= 14) {
+        word = 'лет';
+    } else if (mod10 === 1) {
+        word = 'год';
+    } else if (mod10 >= 2 && mod10 <= 4) {
+        word = 'года';
+    }
+
+    return `${count} ${word}`;
+}
+
+const experienceText = formatExperienceYears(doctor.experience_years);
 const tabCurrent = ref(0);
 
 const bannerData = ref({
@@ -219,4 +308,48 @@ const bannerData = ref({
         }
     ]
 });
+
+const seo = doctor.Seo;
+const ogImage = getStrapiMediaUrl(seo?.shareImage);
+const twitterImage = getStrapiMediaUrl(seo?.twitterImage) || ogImage;
+const ogTitle = seo?.ogTitle || seo?.metaTitle;
+const ogDescription = seo?.ogDescription || seo?.metaDescription;
+const twitterTitle = seo?.twitterTitle || ogTitle;
+const twitterDescription = seo?.twitterDescription || ogDescription;
+
+useSeoMeta({
+    title: seo?.metaTitle,
+    description: seo?.metaDescription,
+    keywords: seo?.metaKeywords,
+    robots: seo?.metaRobots,
+    ogTitle,
+    ogDescription,
+    ogImage,
+    ogType: seo?.ogType,
+    ogLocale: seo?.ogLocale,
+    ogUrl: seo?.canonicalURL,
+    twitterCard: seo?.twitterCard,
+    twitterTitle,
+    twitterDescription,
+    twitterImage,
+    twitterSite: seo?.twitterSite,
+    twitterCreator: seo?.twitterCreator,
+});
+
+const headTags = {};
+
+if (seo?.canonicalURL) {
+    headTags.link = [{ rel: 'canonical', href: seo.canonicalURL }];
+}
+
+if (seo?.structuredData) {
+    headTags.script = [{
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(seo.structuredData),
+    }];
+}
+
+if (Object.keys(headTags).length) {
+    useHead(headTags);
+}
 </script>

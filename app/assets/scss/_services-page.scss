@@ -894,8 +894,33 @@ margin-bottom: 20px;
     .service-cat{
         padding: 23px 20px 23px 30px;
         border-radius: 10px;
-        
     }
+
+    .service-cat--active,
+    .service-cat.active{
+        background: $green1;
+
+        .service-cat__name{
+            color: $white;
+        }
+
+        .service-cat__open-btn{
+            background: $white;
+        }
+
+        .service-cat__open-btn-line{
+            background: $green1;
+        }
+
+        .service-cat__content-teg{
+            color: $white;
+
+            &::before{
+                background: $white;
+            }
+        }
+    }
+
     .service-cat__content-teg{
         display: flex;
         align-items: center;

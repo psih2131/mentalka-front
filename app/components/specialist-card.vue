@@ -2,12 +2,12 @@
     <div class="specialist-card" v-if="props.specialistData">
         <div class="specialist-card__top-info">
          
-            <NuxtLink :to="`/specialists/${specialistData.id}`" class="specialist-card__img">
+            <NuxtLink :to="`/specialists/${specialistData.slug }`" class="specialist-card__img">
                 <img :src="props.specialistData.image" alt="specialist-img" class="specialist-card__img-img">
             </NuxtLink>
             <div class="specialist-card__content">
                 <h3 class="specialist-card__title">
-                    <NuxtLink :to="`/specialists/${specialistData.id}`">{{ specialistData.name }}</NuxtLink>
+                    <NuxtLink :to="`/specialists/${specialistData.slug }`">{{ specialistData.name }}</NuxtLink>
                 </h3>
                 <div class="specialist-card__dop-info-row">
                     <p class="specialist-card__position">{{ props.specialistData.position }}</p>
@@ -20,7 +20,7 @@
 
         <div class="specialist-card__bottom-info">
             <BtnCtrV2 :titleBtn="'Записаться'" />
-            <BtnCtrV3 :titleBtn="'Подробнее'"  :link="`/specialists/${specialistData.id}`" />
+            <BtnCtrV3 :titleBtn="'Подробнее'"  :link="`/specialists/${specialistData.slug}`" />
         </div>
     </div>
 </template>

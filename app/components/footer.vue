@@ -106,29 +106,14 @@
         <nav class="footer__middle-nav footer__middle-nav--v2">
           <p class="footer__middle-nav-title">Направления</p>
           <ul class="footer__middle-nav-list">
-            <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link">Прием психиатра</a>
-            </li>
-            <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link"
-                >Прием психотерапевта</a
-              >
-            </li>
-            <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link">Прием невролога</a>
-            </li>
-            <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link">Прием эндокринолога</a>
-            </li>
-            <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link"
-                >Экспериментально-патопсихологическое обследование</a
-              >
-            </li>
-            <li class="footer__middle-nav-element">
-              <a href="" class="footer__middle-nav-link"
-                >Нейропсихологическая диагностика</a
-              >
+            <li
+              v-for="direction in directions"
+              :key="direction.slug"
+              class="footer__middle-nav-element"
+            >
+              <NuxtLink :to="`/services/${direction.slug}`" class="footer__middle-nav-link">
+                {{ direction.title }}
+              </NuxtLink>
             </li>
           </ul>
         </nav>
@@ -142,20 +127,14 @@
           </div>
 
           <ul class="footer__middle-nav-list-small">
-            <li class="footer__middle-nav-element-small">
-              <a href="" class="footer__middle-nav-link-small"
-                >Политика обработки персональных данных</a
-              >
-            </li>
-            <li class="footer__middle-nav-element-small">
-              <a href="" class="footer__middle-nav-link-small"
-                >Порядок оказания платных медицинских услуг</a
-              >
-            </li>
-            <li class="footer__middle-nav-element-small">
-              <a href="" class="footer__middle-nav-link-small"
-                >Контролирующие органы</a
-              >
+            <li
+              v-for="docPage in docsPages"
+              :key="docPage.slug"
+              class="footer__middle-nav-element-small"
+            >
+              <NuxtLink :to="`/docs/${docPage.slug}`" class="footer__middle-nav-link-small">
+                {{ docPage.title }}
+              </NuxtLink>
             </li>
           </ul>
         </div>
@@ -171,10 +150,14 @@
 
         <nav class="footer__down-nav">
           <ul class="footer__down-nav-list">
-            <li class="footer__down-nav-list-element">
-              <a href="" class="footer__down-nav-link"
-                >Политика конфиденциальности</a
-              >
+            <li
+              v-for="docPage in docsPages"
+              :key="docPage.slug"
+              class="footer__down-nav-list-element"
+            >
+              <NuxtLink :to="`/docs/${docPage.slug}`" class="footer__down-nav-link">
+                {{ docPage.title }}
+              </NuxtLink>
             </li>
           </ul>
         </nav>
@@ -194,4 +177,53 @@
   </footer>
 </template>
 
-<script setup></script>
+<script setup>
+const config = useRuntimeConfig();
+const strapiUrl = config.public.strapiUrl;
+
+const { data: docsPagesResponse } = useFetch(`${strapiUrl}/api/docs-pages`, {
+  query: {
+    'fields[0]': 'title',
+    'fields[1]': 'slug',
+    'pagination[pageSize]': 100,
+  },
+});
+
+const { data: directionsResponse } = useFetch(`${strapiUrl}/api/directions`, {
+  query: {
+    'fields[0]': 'title',
+    'fields[1]': 'slug',
+    'pagination[pageSize]': 100,
+  },
+});
+
+const docsPages = computed(() => {
+  const items = docsPagesResponse.value?.data ?? [];
+
+  return items
+    .map((item) => {
+      const attrs = item.attributes ?? item;
+
+      return {
+        title: attrs.title,
+        slug: attrs.slug,
+      };
+    })
+    .filter((item) => item.title && item.slug);
+});
+
+const directions = computed(() => {
+  const items = directionsResponse.value?.data ?? [];
+
+  return items
+    .map((item) => {
+      const attrs = item.attributes ?? item;
+
+      return {
+        title: attrs.title,
+        slug: attrs.slug,
+      };
+    })
+    .filter((item) => item.title && item.slug);
+});
+</script>

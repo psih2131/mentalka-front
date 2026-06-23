@@ -39,6 +39,14 @@ color: #000000;
     align-items: center;
     
 }
+.post-autor__link{
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
+}
 .post-autor__img{
     width: 117px;
     height: 117px;
@@ -201,7 +209,7 @@ color: #000000;
         }
     }
 
-    b{
+    b, strong{
         color: $green1;
     }
 
@@ -220,7 +228,7 @@ color: #000000;
         font-family: $secondFonts;
         color: $black;
 
-        b{
+        b, strong{
             font-weight: 400;
         }
     }

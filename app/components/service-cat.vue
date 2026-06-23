@@ -1,5 +1,5 @@
 <template>
-    <div class="service-cat" :class="{ 'service-cat--active': isOpen }">
+    <div class="service-cat" :class="{ 'service-cat--active': isOpen, active: isOpen }">
         <div class="service-cat__header" @click="toggle">
             <p class="service-cat__name">{{ title }}</p>
             <div class="service-cat__open-btn">
@@ -21,7 +21,10 @@
                 </div>
 
                 <div class="service-cat__content-btn-wrapper">
-                    <BtnCtrV2 :titleBtn="'Подробнее о направлении'" />
+                    <BtnCtrV2
+                        :titleBtn="'Подробнее о направлении'"
+                        :link="slug ? `/services/${slug}` : ''"
+                    />
                 </div>
             </div>
         </Vue3SlideUpDown>
@@ -43,6 +46,10 @@ defineProps({
     tags: {
         type: Array,
         default: () => [],
+    },
+    slug: {
+        type: String,
+        default: '',
     },
 });
 

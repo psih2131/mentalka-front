@@ -1,10 +1,7 @@
 <template>
     <section class="prices-sec">
         <div class="container">
-            <h1 class="prices-sec__title">
-                Цены на приём специалистов,
-                <b>актуальная стоимость консультаций и психотерапии</b>
-            </h1>
+            <h1 class="prices-sec__title" v-html="pagePrice?.page_title"></h1>
             <div class="prices-sec__content">
                 <nav class="prices-sec__nav prices-sec__nav--desk">
                     <ul class="prices-sec__nav-list">
@@ -50,10 +47,14 @@
                     </ul>
                 </div>
                 </div>
-                
 
                 <div class="prices-sec__list">
-                    <PriceCard v-for="card in priceCards" :key="card.id" :title="card.title" :price="card.price" />
+                    <PriceCard
+                        v-for="(card, index) in visibleServices"
+                        :key="card.id ?? index"
+                        :title="card.title"
+                        :price="card.price"
+                    />
                 </div>
             </div>
         </div>
@@ -61,88 +62,135 @@
 </template>
 
 <script setup>
-
 import PriceCard from '@/components/price-card.vue';
+import { ref, watch } from 'vue';
 
-import { ref } from 'vue';
+const config = useRuntimeConfig();
+const strapiUrl = config.public.strapiUrl;
 
-const navTabs = [
-    'Все услуги',
-    'Психиатрия',
-    'Психотерапия',
-    'Неврология',
-    'Эндокринология'
-];
+const { data: pagePriceResponse } = await useFetch(`${strapiUrl}/api/page-price`, {
+    query: {
+        'populate[services]': true,
+        'populate[Seo][populate][shareImage]': true,
+        'populate[Seo][populate][twitterImage]': true,
+    },
+});
 
+function mapPagePrice(response) {
+    const item = response?.data;
+
+    if (!item) {
+        return null;
+    }
+
+    return item.attributes ?? item;
+}
+
+function getStrapiMediaUrl(media) {
+    if (!media) {
+        return null;
+    }
+
+    const file = media.data ?? media;
+    const url = file.url ?? file.attributes?.url;
+
+    if (!url) {
+        return null;
+    }
+
+    return url.startsWith('http') ? url : `${strapiUrl}${url}`;
+}
+
+const pagePrice = ref(mapPagePrice(pagePriceResponse.value));
+const navTabs = ref(['Все услуги']);
+const visibleServices = ref([]);
 const currentTab = ref(0);
 const isNavOpen = ref(false);
+
+function buildNavTabs() {
+    const categories = [];
+
+    for (const service of pagePrice.value?.services ?? []) {
+        if (service.category && !categories.includes(service.category)) {
+            categories.push(service.category);
+        }
+    }
+
+    navTabs.value = ['Все услуги', ...categories];
+}
+
+function updateVisibleServices() {
+    const services = pagePrice.value?.services ?? [];
+
+    if (currentTab.value === 0) {
+        visibleServices.value = services;
+        return;
+    }
+
+    const category = navTabs.value[currentTab.value];
+
+    visibleServices.value = services.filter((service) => service.category === category);
+}
 
 const selectTab = (index) => {
     currentTab.value = index;
     isNavOpen.value = false;
+    updateVisibleServices();
 };
 
-const priceCards = ref([
-    {
-        id: 1,
-        title: 'Прием врача-психиатра',
-        price: 'от 3 500 ₽ / час'
-    },
-    {
-        id: 2,
-        title: 'Прием детского психиатра',
-        price: 'от 5 000 ₽ / час'
-    },
-    {
-        id: 3,
-        title: 'Прием врача-психотерапевта',
-        price: 'от 6 000 ₽ / час'
-    },
-    {
-        id: 4,
-        title: 'Групповая психотерапия (тренинг навыков DBT)',
-        price: 'от 3 500 ₽ / час'
-    },
-    {
-        id: 5,
-        title: 'Семейная психотерапия',
-        price: 'от 9 000 ₽ / час'
-    },
-    {
-        id: 6,
-        title: 'Приём врача-психотерапевта детского',
-        price: 'от 6 000 ₽ / час'
-    },
-    {
-        id: 7,
-        title: 'Экспериментально-патопсихологическое обследование',
-        price: 'от 9 000 ₽ / час'
-    },
-    {
-        id: 8,
-        title: 'Индивидуальная психологическая сессия (первичная)',
-        price: 'от 3 000 ₽ / час'
-    },
-    {
-        id: 9,
-        title: 'Приём врача-невролога',
-        price: 'от 9 000 ₽ / час'
-    },
-    {
-        id: 10,
-        title: 'Консультация детского невролога',
-        price: 'от 3 000 ₽ / час'
-    },
-    {
-        id: 11,
-        title: 'Приём врача-эндокринолога',
-        price: 'от 3 500 ₽ / час'
-    },
-    {
-        id: 12,
-        title: 'Консультация детского эндокринолога',
-        price: 'от 3 500 ₽ / час'
-    }
-]);
+function initPagePrice() {
+    pagePrice.value = mapPagePrice(pagePriceResponse.value);
+    buildNavTabs();
+    updateVisibleServices();
+}
 
+initPagePrice();
+
+watch(pagePriceResponse, () => {
+    initPagePrice();
+}, { deep: true });
+
+const seo = pagePrice.value?.Seo;
+const ogImage = getStrapiMediaUrl(seo?.shareImage);
+const twitterImage = getStrapiMediaUrl(seo?.twitterImage) || ogImage;
+const ogTitle = seo?.ogTitle || seo?.metaTitle;
+const ogDescription = seo?.ogDescription || seo?.metaDescription;
+const twitterTitle = seo?.twitterTitle || ogTitle;
+const twitterDescription = seo?.twitterDescription || ogDescription;
+
+useSeoMeta({
+    title: seo?.metaTitle,
+    description: seo?.metaDescription,
+    keywords: seo?.metaKeywords,
+    robots: seo?.metaRobots,
+    ogTitle,
+    ogDescription,
+    ogImage,
+    ogType: seo?.ogType,
+    ogLocale: seo?.ogLocale,
+    ogUrl: seo?.canonicalURL,
+    twitterCard: seo?.twitterCard,
+    twitterTitle,
+    twitterDescription,
+    twitterImage,
+    twitterSite: seo?.twitterSite,
+    twitterCreator: seo?.twitterCreator,
+});
+
+const headTags = {};
+
+if (seo?.canonicalURL) {
+    headTags.link = [{ rel: 'canonical', href: seo.canonicalURL }];
+}
+
+if (seo?.structuredData) {
+    headTags.script = [{
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(seo.structuredData),
+    }];
+}
+
+if (Object.keys(headTags).length) {
+    useHead(headTags);
+}
 </script>

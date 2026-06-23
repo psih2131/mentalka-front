@@ -2,36 +2,40 @@
     <section class="inform-hero-sec">
         <div class="container">
             <div class="inform-hero-sec__data">
-                <h1 class="inform-hero-sec__title">Информация о медицинской организации</h1>
-                <p class="inform-hero-sec__subtitle">Правовые документы, порядок оказания медицинских услуг и обязательные сведения о деятельности клиники</p>
+                <h1 class="inform-hero-sec__title">{{ heroSection?.title_section }}</h1>
+                <p class="inform-hero-sec__subtitle">{{ heroSection?.subtitle_text }}</p>
                 <div class="inform-hero-sec__btns-row">
-                    <BtnCtrV1 titleBtn="Записаться на приём" />
-                    <BtnCtrV1 titleBtn="Задать вопрос" />
+                    <BtnCtrV1 :titleBtn="heroSection?.button_1_text" />
+                    <BtnCtrV1 :titleBtn="heroSection?.button_2_text" />
                 </div>
             </div>
 
             <div class="inform-hero-sec__img-wrapper">
-                <img src="../assets/images/inform.jpg" alt="inform-hero-sec-img" class="inform-hero-sec__img">
+                <img
+                    v-if="heroImageUrl"
+                    :src="heroImageUrl"
+                    alt="inform-hero-sec-img"
+                    class="inform-hero-sec__img"
+                >
             </div>
         </div>
     </section>
 
     <section class="inform-docs-sec">
         <div class="container">
-            <h2 class="inform-docs-sec__title">Нормативные документы и правовая база, <b>федеральные законы, приказы Минздрава 
-                и постановления, регулирующие деятельность медицинской организации</b></h2>
+            <h2 class="inform-docs-sec__title" v-html="docsSection?.title_section"></h2>
 
             <div class="inform-docs-sec__content">
                 <div
                     v-for="cluster in docsClusters"
-                    :key="cluster.title"
+                    :key="cluster.id"
                     class="inform-docs-sec__cluster"
                 >
                     <h3 class="inform-docs-sec__cluster-title">{{ cluster.title }}</h3>
 
                     <DocComponent
                         v-for="doc in cluster.docs"
-                        :key="doc.title"
+                        :key="doc.id"
                         :title="doc.title"
                         :open-url="doc.openUrl"
                         :download-url="doc.downloadUrl"
@@ -46,48 +50,107 @@
 import BtnCtrV1 from '@/components/btn-ctr-v1.vue';
 import DocComponent from '@/components/doc-component.vue';
 
-const docsClusters = [
-    {
-        title: 'Федеральные законы',
-        docs: [
-            { title: 'Закон «О защите прав потребителей»', openUrl: '', downloadUrl: '' },
-            { title: 'Федеральный закон об основах охраны здоровья граждан в Российской Федерации', openUrl: '', downloadUrl: '' },
-            { title: 'Федеральный закон по ОМС в РФ', openUrl: '', downloadUrl: '' },
-        ],
+const config = useRuntimeConfig();
+const strapiUrl = config.public.strapiUrl;
+
+const { data: pageInformationResponse } = await useFetch(`${strapiUrl}/api/page-information`, {
+    query: {
+        'populate[inform_hero_section][populate][image]': true,
+        'populate[inform_docs_section][populate][inform_docs_clusters][populate][docs][populate][file]': true,
+        'populate[Seo][populate][shareImage]': true,
+        'populate[Seo][populate][twitterImage]': true,
     },
-    {
-        title: 'Постановления Правительства',
-        docs: [
-            { title: 'Постановление об утверждении правил предоставления медицинскими организациями платных медицинских услуг', openUrl: '', downloadUrl: '' },
-            { title: 'Постановление Правительства Москвы о Территориальной программе государственных гарантий бесплатного оказания гражданам медицинской помощи', openUrl: '', downloadUrl: '' },
-        ],
-    },
-    {
-        title: 'Приказы Минздрава',
-        docs: [
-            { title: 'Приказ Минздрава России от 06.12.2021 № 1122н «Об утверждении национального календаря профилактических прививок, календаря профилактических прививок по эпидемическим показаниям и порядка проведения профилактических прививок»', openUrl: '', downloadUrl: '' },
-            { title: 'Приказ Минздравсоцразвития России от 26.04.2012 № 406н «Об утверждении Порядка выбора гражданином медицинской организации при оказании ему медицинской помощи в рамках программы государственных гарантий бесплатного оказания гражданам медицинской помощи»', openUrl: '', downloadUrl: '' },
-        ],
-    },
-    {
-        title: 'Информация для граждан',
-        docs: [
-            { title: 'Права и обязанности гражданина в сфере охраны здоровья', openUrl: '', downloadUrl: '' },
-            { title: 'Правила записи на приём', openUrl: '', downloadUrl: '' },
-            { title: 'Памятка для граждан о гарантиях бесплатного оказания медицинской помощи', openUrl: '', downloadUrl: '' },
-        ],
-    },
-    {
-        title: 'Лицензии',
-        docs: [
-            { title: 'Выписка из реестра лицензий', openUrl: '', downloadUrl: '' },
-        ],
-    },
-    {
-        title: 'Клинические рекомендации',
-        docs: [
-            { title: 'Рубрикатор клинических рекомендаций', openUrl: '', downloadUrl: '' },
-        ],
-    },
-];
+});
+
+function mapPageInformation(response) {
+    const item = response?.data;
+
+    if (!item) {
+        return null;
+    }
+
+    return item.attributes ?? item;
+}
+
+function getStrapiMediaUrl(media) {
+    if (!media) {
+        return null;
+    }
+
+    const file = media.data ?? media;
+    const url = file.url ?? file.attributes?.url;
+
+    if (!url) {
+        return null;
+    }
+
+    return url.startsWith('http') ? url : `${strapiUrl}${url}`;
+}
+
+function mapDocsClusters(clusters) {
+    return (clusters ?? []).map((cluster, clusterIndex) => ({
+        id: cluster.id ?? clusterIndex,
+        title: cluster.cluster_title,
+        docs: (cluster.docs ?? []).map((doc, docIndex) => {
+            const fileUrl = getStrapiMediaUrl(doc.file);
+
+            return {
+                id: doc.id ?? `${clusterIndex}-${docIndex}`,
+                title: doc.title_doc,
+                openUrl: fileUrl ?? '',
+                downloadUrl: fileUrl ?? '',
+            };
+        }),
+    }));
+}
+
+const pageInformation = mapPageInformation(pageInformationResponse.value);
+const heroSection = pageInformation?.inform_hero_section;
+const docsSection = pageInformation?.inform_docs_section;
+const heroImageUrl = getStrapiMediaUrl(heroSection?.image);
+const docsClusters = mapDocsClusters(docsSection?.inform_docs_clusters);
+
+const seo = pageInformation?.Seo;
+const ogImage = getStrapiMediaUrl(seo?.shareImage);
+const twitterImage = getStrapiMediaUrl(seo?.twitterImage) || ogImage;
+const ogTitle = seo?.ogTitle || seo?.metaTitle;
+const ogDescription = seo?.ogDescription || seo?.metaDescription;
+const twitterTitle = seo?.twitterTitle || ogTitle;
+const twitterDescription = seo?.twitterDescription || ogDescription;
+
+useSeoMeta({
+    title: seo?.metaTitle,
+    description: seo?.metaDescription,
+    keywords: seo?.metaKeywords,
+    robots: seo?.metaRobots,
+    ogTitle,
+    ogDescription,
+    ogImage,
+    ogType: seo?.ogType,
+    ogLocale: seo?.ogLocale,
+    ogUrl: seo?.canonicalURL,
+    twitterCard: seo?.twitterCard,
+    twitterTitle,
+    twitterDescription,
+    twitterImage,
+    twitterSite: seo?.twitterSite,
+    twitterCreator: seo?.twitterCreator,
+});
+
+const headTags = {};
+
+if (seo?.canonicalURL) {
+    headTags.link = [{ rel: 'canonical', href: seo.canonicalURL }];
+}
+
+if (seo?.structuredData) {
+    headTags.script = [{
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(seo.structuredData),
+    }];
+}
+
+if (Object.keys(headTags).length) {
+    useHead(headTags);
+}
 </script>

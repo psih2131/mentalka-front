@@ -1,0 +1,77 @@
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.modal__window {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    background: #F6F6F6;
+    border-radius: 25px;
+    padding: 30px;
+}
+
+.modal__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 0.6;
+    }
+}
+
+.modal__title {
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 90%;
+    letter-spacing: -0.03em;
+    color: $black;
+    padding-right: 40px;
+}
+
+.modal__form {
+    margin-top: 24px;
+
+    .contacts-hero-sec__form-fields,
+    .contacts-hero-sec__form-inp,
+    .contacts-hero-sec__form-inp input,
+    .contacts-hero-sec__form-inp textarea,
+    .contacts-hero-sec__form-fields .btn-ctr-v1 {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    .modal {
+        padding: 15px;
+    }
+
+    .modal__window {
+        border-radius: 15px;
+        padding: 24px 20px;
+    }
+
+    .modal__title {
+        font-size: 22px;
+    }
+}

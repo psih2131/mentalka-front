@@ -1,0 +1,53 @@
+.docs-page-sec{
+    padding: 170px 0 100px;
+}
+
+.docs-page-sec__title{
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 90%;
+    letter-spacing: -0.03em;
+    margin-bottom: 40px;
+    color: $black;
+}
+
+@media only screen and (max-width: 1360px) {
+
+}
+
+@media only screen and (max-width: 1280px) {
+
+}
+
+@media only screen and (max-width: 1240px) {
+
+    .docs-page-sec{
+        padding: 100px 0 80px;
+    }
+    .docs-page-sec__title{
+        font-size: 28px;
+    }
+}
+
+@media only screen and (max-width: 940px) {
+
+
+}
+
+
+
+@media only screen and (max-width: 760px) {
+
+    .docs-page-sec{
+        padding: 80px 0 60px;
+    }
+    .docs-page-sec__title{
+        font-size: 22px;
+        margin-bottom: 30px;
+    }
+}
+
+@media only screen and (max-width: 360px) {
+
+
+}

@@ -43,8 +43,8 @@
         </div>
 
         <div class="blog-post__bottom">
-            <BtnCtrV3 v-if="modHome" :titleBtn="'Читать статью'"  :link="`/blog/${post.id}`" />
-            <BtnCtrV3 v-else :titleBtn="'Подробнее'"  :link="`/blog/${post.id}`" />
+            <BtnCtrV3 v-if="modHome" :titleBtn="'Читать статью'"  :link="`/blog/${post.slug}`"  />
+            <BtnCtrV3 v-else :titleBtn="'Подробнее'"  :link="`/blog/${post.slug }`"  />
 
            <p class="blog-post__date">{{ post.date }}</p>
         </div>

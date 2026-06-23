@@ -23,17 +23,14 @@
                 <li class="mob-meny__acc-row">
                   <NuxtLink to="/services" class="mob-meny__acc-link">Все услуги</NuxtLink>
                 </li>
-                <li class="mob-meny__acc-row">
-                  <a href="" class="mob-meny__acc-link">Психотерапия</a>
-                </li>
-                <li class="mob-meny__acc-row">
-                  <a href="" class="mob-meny__acc-link">Психиатрическая помощь</a>
-                </li>
-                <li class="mob-meny__acc-row">
-                  <a href="" class="mob-meny__acc-link">Семейная терапия</a>
-                </li>
-                <li class="mob-meny__acc-row">
-                  <a href="" class="mob-meny__acc-link">Диагностика</a>
+                <li
+                  v-for="direction in directions"
+                  :key="direction.slug"
+                  class="mob-meny__acc-row"
+                >
+                  <NuxtLink :to="`/services/${direction.slug}`" class="mob-meny__acc-link">
+                    {{ direction.title }}
+                  </NuxtLink>
                 </li>
               </ul>
             </div>
@@ -161,7 +158,7 @@
         </div>
       </div>
 
-      <button class="mob-meny__btn btn-ctr">
+      <button type="button" class="mob-meny__btn btn-ctr" @click="openAppointmentModal">
         <span class="btn-ctr__text">Записаться</span>
         <span class="btn-ctr__ar">
           <svg
@@ -388,17 +385,14 @@
                     <li class="header__submenu-item">
                       <NuxtLink to="/services" class="header__nav-link">Все услуги</NuxtLink>
                     </li>
-                    <li class="header__submenu-item">
-                      <NuxtLink to="/services/psycho-therapy" class="header__nav-link">Психотерапия</NuxtLink>
-                    </li>
-                    <li class="header__submenu-item">
-                      <NuxtLink to="/services/psychiatric-help" class="header__nav-link">Психиатрическая помощь</NuxtLink>
-                    </li>
-                    <li class="header__submenu-item">
-                      <NuxtLink to="/services/family-therapy" class="header__nav-link">Семейная терапия</NuxtLink>
-                    </li>
-                    <li class="header__submenu-item">
-                      <NuxtLink to="/services/diagnosis" class="header__nav-link">Диагностика</NuxtLink>
+                    <li
+                      v-for="direction in directions"
+                      :key="direction.slug"
+                      class="header__submenu-item"
+                    >
+                      <NuxtLink :to="`/services/${direction.slug}`" class="header__nav-link">
+                        {{ direction.title }}
+                      </NuxtLink>
                     </li>
                   </ul>
                 </li>
@@ -424,7 +418,7 @@
             </nuv>
           </div>
           <div class="header__down-right">
-            <button class="header__btn-ctr btn-ctr">
+            <button type="button" class="header__btn-ctr btn-ctr" @click="openAppointmentModal">
               <span class="btn-ctr__text"> Записаться </span>
               <span class="btn-ctr__ar">
                 <svg
@@ -527,11 +521,45 @@
 </template>
 
 <script setup>
-  import { ref, watch } from 'vue';
-  
+  import { ref, watch, computed } from 'vue';
+  import { MODAL_NAMES, useModalStore } from '@/stores/modal';
+
+  const modalStore = useModalStore();
+
+  const config = useRuntimeConfig();
+  const strapiUrl = config.public.strapiUrl;
+
+  const { data: directionsResponse } = useFetch(`${strapiUrl}/api/directions`, {
+    query: {
+      'fields[0]': 'title',
+      'fields[1]': 'slug',
+      'pagination[pageSize]': 100,
+    },
+  });
+
+  const directions = computed(() => {
+    const items = directionsResponse.value?.data ?? [];
+
+    return items
+      .map((item) => {
+        const attrs = item.attributes ?? item;
+
+        return {
+          title: attrs.title,
+          slug: attrs.slug,
+        };
+      })
+      .filter((item) => item.title && item.slug);
+  });
 
   const isMenuOpen = ref(false);
   const isServicesOpen = ref(false);
+
+  function openAppointmentModal() {
+    modalStore.openModal(MODAL_NAMES.APPOINTMENT);
+    isMenuOpen.value = false;
+    isServicesOpen.value = false;
+  }
 
   watch(isMenuOpen, (open) => {
     if (!open) {

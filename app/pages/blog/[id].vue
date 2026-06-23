@@ -2,17 +2,33 @@
     <section class="post-hero-sec">
         <div class="container">
             <div class="post-hero-sec__data">
-                <h1 class="post-hero-sec__title">Как распознать депрессию и как из нее выйти (10 признаков)</h1>
-                <p class="post-hero-sec__subtitle">Опытные врачи и клинические психологи, работающие по современным медицинским стандартам.</p>
+                <h1 class="post-hero-sec__title">{{ post.post_title }}</h1>
+                <p class="post-hero-sec__subtitle">{{ post.short_description }}</p>
                 <div class="post-hero-sec__autor post-autor">
-                    <div class="post-autor__img">
-                        <img src="../../assets/images/posts/post-autor.jpg" alt="autor-img">
-                    </div>
-                    <div class="post-autor__data">
-                        <p class="post-autor__subtitle">Автор</p>
-                        <p class="post-autor__title">Полле Михаил Игоревич</p>
-                        <p class="post-autor__autor">Детский врач-психиатр</p>
-                    </div>
+                    <NuxtLink
+                        v-if="post.doctor?.slug"
+                        :to="`/specialists/${post.doctor.slug}`"
+                        class="post-autor__link"
+                    >
+                        <div v-if="post.doctor.photo" class="post-autor__img">
+                            <img :src="getStrapiMediaUrl(post.doctor.photo)" :alt="post.doctor.name || 'autor-img'">
+                        </div>
+                        <div class="post-autor__data">
+                            <p class="post-autor__subtitle">Автор</p>
+                            <p class="post-autor__title">{{ post.doctor.name }}</p>
+                            <p class="post-autor__autor">{{ post.doctor.specialization }}</p>
+                        </div>
+                    </NuxtLink>
+                    <template v-else-if="post.doctor">
+                        <div v-if="post.doctor.photo" class="post-autor__img">
+                            <img :src="getStrapiMediaUrl(post.doctor.photo)" :alt="post.doctor.name || 'autor-img'">
+                        </div>
+                        <div class="post-autor__data">
+                            <p class="post-autor__subtitle">Автор</p>
+                            <p class="post-autor__title">{{ post.doctor.name }}</p>
+                            <p class="post-autor__autor">{{ post.doctor.specialization }}</p>
+                        </div>
+                    </template>
 
                     <div class="post-autor__post-nav-mob" @click="btnMobPostMeny = !btnMobPostMeny">
                         <svg width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,8 +48,8 @@
                     </div>
                 </div>
             </div>
-            <div class="post-hero-sec__img-wrapper">
-                <img src="../../assets/images/posts/post-1.jpg" alt="post-img" class="post-hero-sec__img">
+            <div v-if="post.post_image" class="post-hero-sec__img-wrapper">
+                <img :src="getStrapiMediaUrl(post.post_image)" :alt="post.post_title" class="post-hero-sec__img">
             </div>
         </div>
     </section>
@@ -45,51 +61,35 @@
             <aside class="post-content-sec__aside post-aside" :class="{'active': btnMobPostMeny}">
                 <div class="post-aside__naw-wrapper">
                     <p class="post-aside__naw-title">Содержание</p>
-                    <ul class="post-aside__naw-list">
-                        <li class="post-aside__naw-item active">
-                            <a href="">Что такое депрессия</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Признаки и симптомы</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Признаки депрессии у мужчин</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Признаки депрессии у женщин</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Причины развития депрессии</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Виды и стадии депрессии</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Когда обращаться к врачу</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">К какому врачу обратиться</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Диагностика депрессии</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Лечение депрессии</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Как помочь близкому человеку</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Профилактика депрессии</a>
-                        </li>
-                        <li class="post-aside__naw-item">
-                            <a href="">Часто задаваемые вопросы</a>
-                        </li>
+                    <ul v-if="post.post_content_constuctor?.length" class="post-aside__naw-list">
+                        <template v-for="(block, blockIndex) in post.post_content_constuctor" :key="block.id ?? blockIndex">
+                            <li
+                                v-if="block.__component === 'shared.post-cluster-text' && block.post_cluster_data?.cluster_id_nav"
+                                class="post-aside__naw-item"
+                                :class="{ active: activeNavId === block.post_cluster_data.cluster_id_nav }"
+                            >
+                                <a :href="`#${block.post_cluster_data.cluster_id_nav}`">
+                                    {{ block.post_cluster_data.cluster_title_nav }}
+                                </a>
+                            </li>
+                            <li
+                                v-else-if="block.__component === 'shared.post-cluster-2-col' && block.cluster_title_nav?.cluster_id_nav"
+                                class="post-aside__naw-item"
+                                :class="{ active: activeNavId === block.cluster_title_nav.cluster_id_nav }"
+                            >
+                                <a :href="`#${block.cluster_title_nav.cluster_id_nav}`">
+                                    {{ block.cluster_title_nav.cluster_title_nav }}
+                                </a>
+                            </li>
+                        </template>
                     </ul>
                 </div>
 
                 <div class="post-aside__progress-line">
-                    <div class="post-aside__progress-line-inner"></div>
+                    <div
+                        class="post-aside__progress-line-inner"
+                        :style="{ width: `${readProgress}%` }"
+                    ></div>
                 </div>
 
                 <div class="post-aside__read-time">
@@ -104,132 +104,46 @@
                     </clipPath>
                     </defs>
                     </svg>
-                    <span>10 минут чтения</span>
-
+                    <span v-if="post.time_read_min">{{ post.time_read_min }} минут чтения</span>
                 </div>
             </aside>
 
             <div class="post-content-sec__body">
                 <div class=" text-editor">
-                    <div class="text-editor__cluster" id="text-editor-cluster-1">
-                        <h2>Что такое депрессия: основные понятия</h2>
-                        <p><b>Депрессия</b> — серьёзное психическое заболевание, относящееся к аффективным расстройствам. Это депрессивное расстройство характеризуется продолжительным (минимум двух, так и нескольких недель) снижением настроения, потерей способности ощущать радости от своего существования (анедонией) и другими негативными проявлениями. Это заболевание отличается от обычной кратковременной грусти или слабости тем, что признаки при депрессии стойкие и значительно нарушают жизнь человека. Важно понимать, что депрессивная болезнь — это не проявление слабости. Эту патологию нужно диагностировать и лечить как любое другое заболевание.</p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-2">
-                        <h2>Признаки и симптомы депрессии</h2>
-                        <p>Процесс развития депрессии постепенный. Сначала возникают незначительные изменения настроения и энергии, которые со временем усиливаются. Ниже перечислены основные проявления этого психического состояния:</p>
-                        <ul>
-                            <li>постоянно подавленное, грустное настроение, тревога;</li>
-                            <li>потеря интереса и удовольствия от ранее любимых занятий (апатия);</li>
-                            <li>быстрая утомляемость и снижение уровня энергии;</li>
-                            <li>нарушения сна: бессонница или, наоборот, сильная сонливость;</li>
-                            <li>изменения аппетита и веса (снижение аппетита, потеря аппетита или набор массы тела);                        </li>
-                            <li>чувство вины, никчемности или заниженная самооценка; </li>
-                            <li>затруднения с концентрацией, обработкой информации и принятием решений;                        </li>
-                            <li>мысли о смерти или суициде.</li>
-                        </ul>
-
-                        <p>Первые, ранние проявления депрессии могут остаться незамеченными. Пациент может жаловаться на упадок сил, нервозность или проблемы со сном. Эпизодически наблюдается небольшое улучшение эмоционального фона, и многие списывают своё состояние на стресс или переутомление. Мягкие проявления сопровождаются неустойчивым самочувствием, снижением интереса к хобби, память и концентрация становятся хуже.. Если такие признаки длятся более двух недель и нарастают, по правилу следует насторожиться, так как возможно, начинается депрессивное расстройство.</p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-3">
-                        <h2>Эмоциональные признаки</h2>
-                        <p>К чувственным аспектам депрессии относятся глубокая печаль, эмоция тоски или отчаяния. У больного пропадает радость — даже приятные события не улучшают его эмоциональный фон. Присутствует необъяснимая вина или ощущение собственной бесполезности, а негативные эмоции преобладают. Будущее видится в мрачных красках: больной склонен к пессимизму и ощущает безнадёжность. Возможна повышенная плаксивость или, наоборот, эмоциональная заторможенность, когда люди заметно менее отзывчивы, чем обычно.</p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-4">
-                        <h2>Поведенческие признаки</h2>
-                        <p>Депрессия меняет поведение и образ жизни пациента. Больной замыкается в себе, избегать контактов и прежних увлечений. Снижается работоспособность: происходит снижение успеваемости или эффективности на работе днём, человек откладывает важные заботы «на потом». Некоторые начинают злоупотреблять спиртным или другими веществами, пытаясь облегчить своё самочувствие. Пациент теряет инициативу, самооценка падает, не справляется, пребывает в нерешительности.. В тяжёлых случаях окружающие замечают, что мимика и речь беднее, движения замедлены — возникает психомоторная заторможенность.</p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-5">
-                        <h2>Признаки депрессии у мужчин</h2>
-                        <p>У мужчин симптомы депрессии часто проявляются иначе. На первый план выступают раздражительность, вспышки гнева и агрессивность, тогда как подавленное настроение мужчина старается скрыть. Мужчины могут маскировать своё состояние повышенной занятостью или злоупотреблением алкоголем. Мужчина с депрессивным расстройством зачастую кажется злым или холодным, хотя внутри он испытывает ту же безысходность и печаль. К сожалению, мужчины реже идут к специалисту, поэтому их депрессия нередко остаётся невыявленной до тяжёлой фазы.</p>
-                        <p>У мужчин проявления депрессии зачастую бывают разными и неявными: подавленное настроение может скрываться за грубостью или усталостью. Изменяется распорядок дня — потеря сна или, наоборот, избыточный сон, снижение интереса к прошлым увлечениям и работе. Общее самочувствие может казаться обычным снаружи, но близкие замечают упадок сил и неспособность радоваться существованию.</p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-6">
-                        <h2>Признаки депрессии у женщин</h2>
-                        <p>Женщины сталкиваются с депрессией более чем вдвое чаще мужчин. Проявления депрессии у них типично соответствуют классической картине: стойкое подавленное настроение, плаксивость, самоупрёк, быстрая утомляемость. Часто заболевание развивается в периоды гормональных нарушений — например, в послеродовый период или при смене климакса. Женщины чаще осознают заболевание и обращаются за помощью, поэтому их депрессия реже остаётся совершенно без внимания.</p>
-                        <p><b>Женщина в депрессии может жаловаться на бессонницу и усталость, даже когда внешне кажется, что у неё всё в порядке. Утрата интереса к хобби и трудности с выполнением бытовых дел — характерные проявления.
-                        </b></p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-7">
-                        <h2>Причины развития депрессии</h2>
-                        <p>Депрессия как патология возникает под влиянием нескольких факторов. Коренные причины развития депрессии — генетическая (наследственная) предрасположенность, дисбаланс веществ в организме и нейромедиаторов (в частности, серотонина) в мозге, гормональные нарушения. Серьёзным фактором риска может стать высокий стресс (потеря, тяжёлая болезнь, развод, психологическая травма). Вероятность развития этого психического заболевания повышается при наличии хронических соматических заболеваний, при злоупотреблении спиртным или зависимостью от наркотиков, а также при хроническом дефиците сна и нездоровом образе жизни.</p>
-                        <p>Новые исследования показывают, что эпизоды депрессии связаны не только с генетикой, но и с эндогенными нарушениями химии мозга и гормонального баланса. Эти патологические нарушения дополняются психологическими и социальными факторами. В частности, изоляция, продолжительные конфликты или высокий уровень стресса, связанный с работой, могут стать спусковым фактором для депрессивного эпизода. Учёные отмечают, что нарушение циркадных ритмов, снижение физической и отсутствие регулярной активности в обществе играют важную роль и усиливают проявления депрессии. Именно поэтому комплексное лечение включает не только медикаментозную терапию, поскольку это лишь часть подхода, но ещё и рекомендации по поддержанию социальной вовлечённости.</p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-8">
-                        <h2>Виды и стадии депрессии</h2>
-                        <p>Согласно классификации, основные формы депрессии — это большая депрессия (продолжительностью от нескольких недель)
-                            и сезонная депрессия (сезонно: осенне‑зимняя) — уже разные типы аффективных расстройств. При биполярном типе расстройства периоды депрессии чередуются с маниакальными фазами.</p>
-                        <p>В классификации по тяжести выделяют слабую, умеренную и тяжёлую депрессию. При слабой форме проявления незначительны — человек способен выполнять часть повседневных обязанностей. При тяжёлой пациент практически не встаёт с постели, испытывает постоянное отчаяние и сильные суицидальные мысли. Состояние в различных формах и этапах заболевания проявляется по‑разному: при тяжёлой форме симптомы выражены ярче, при мягкой — едва заметны. Более тяжёлые стадии имеют иной характер и нуждаются в интенсивном наблюдении специалиста.</p>
-                    </div>
-
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-9">
-                        <h2>Когда обращаться к врачу: тревожные сигналы</h2>
-                        <p>При появлении первых признаков депрессии рекомендуется безотлагательно обратиться к специалисту. Особенно опасны следующие проявления, требующие немедленной медицинской помощи:</p>
-                        <ul>
-                            <li>регулярные размышления о смерти или суициде, попытки самоубийства и самоповреждения;</li>
-                            <li>полная утрата способности заботиться о себе (пациент выбирает не вставать с постели, не ест);
-                            </li>
-                            <li>появление галлюцинаций или бреда, вроде ощущения вины за несуществующие грехи.
-                            </li>
-                        </ul>
-                        <p><b>Если вы замечаете у родного человека тревожные симптомы (например, резкое похудение, дневную сонливость, мысли и слова о бессмысленности существования), важно убедить его задуматься об обращении к психиатру. Специалист проведёт оценку самочувствия пациента, разберёт клинический случай и назначит необходимое лечение.</b></p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-10">
-                        <h2>К какому врачу обратиться при признаках депрессии</h2>
-                        <p>Главным специалистом при подозрении на депрессию как правило является психиатр. Именно эти врачи компетентны диагностировать депрессивное расстройство и назначать методы лечения. Кроме того, лечением депрессии занимаются психотерапевты и клинические психологи, проводящие лечебные беседы. После выявления депрессии не следует медлить с визитом на прием к специалисту, лучше записываться заранее. 
-                            В клинике Ментал'КА трудятся опытные психиатры и психологи, специализирующиеся на тревожно‑депрессивных расстройствах и предлагающие современные схемы терапии.</p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-11">
-                        <h2>Диагностика депрессии</h2>
-                        <p>Диагноз депрессии ставит врач на основе данных комплексной обработки и оценки самочувствия пациента. Специалист подробно опрашивает пациента о проявлениях его состояния, выясняет, какие из них присутствуют и как долго, находит связь. Происходит процесс общей оценки настроения, мышления и общего здоровья. Существуют специальные опросники и тесты для выявления депрессии. Кроме того проводится медицинское обследование и дополнительные исследования: важно исключить соматические заболевания с похожими проявлениями (проблемы с щитовидной железой и другие состояния, связанные с эндокринной системой, дефицит витаминов, невролог Ранняя диагностика позволяет врачу поставить точный диагноз, назначить правильное лечение, улучшить прогноз и отличить депрессию от других психических или телесных заболеваний. Также специалист может оценить тяжесть расстройства, наличие и количество когнитивных нарушений, особенности течения и уровень социальной дезадаптации.</p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-12">
-                        <h2>Лечение депрессии: методы и подходы</h2>
-                        <p>Цель и задача лечения депрессии — вернуть пациенту полноценное качество жизни и здоровье. Важно помнить, что депрессивное расстройство требует системной терапии, а не только приёма лекарств.</p>
-                        <div class="text-editor__two-col">
-                            <div class="text-editor__col">
-                                <h3><b>Психотерапия</b></h3>
-                                <p>При начальных (слабых) проявлениях иногда достаточно регулярных встреч с психологом, психотерапевтом или семейным терапевтом. Хорошо работают методы когнитивно‑поведенческой терапии, использование которых помогает избавиться от негативных тенденций. Индивидуальные или групповые сеансы, практики оказывают эмоциональную поддержку и обучают пациента навыкам самопомощи, чтобы справляться. В некоторых случаях специалист рекомендует поведенческую терапию, арт‑ или семейную терапию, что помогает восстановить общественную активность и отношения.</p>
-                            </div>
-
-                            <div class="text-editor__col">
-                                <h3><b>Лекарственное лечение</b></h3>
-                                <p>При депрессии средней и тяжёлой степени применяются антидепрессанты. Эти препараты нормализуют баланс нейромедиаторов, включая серотонин, в мозге, их действие ослабляет симптомы. Лекарства и препараты нужно принимать длительно под контролем врача. В сложных случаях могут быть задействованы комбинированные схемы, электросудорожная терапия или другие интенсивные подходы. Кроме того, врач назначает препараты для коррекции нарушений сна или тревожности, формируя персональную программу. Также в программе лечения важна содействие со стороны семьи, восстановление режима сна и здоровый образ жизни. Восстановление социальной инициативности, приемлемая физическая активность и работа с психологом помогают снизить риск рецидивов и дают результат в долгосрочной перспективе.</p>
-                            </div>
+                    <template v-for="(block, blockIndex) in post.post_content_constuctor" :key="block.id ?? blockIndex">
+                        <div
+                            v-if="block.__component === 'shared.post-cluster-text'"
+                            class="text-editor__cluster"
+                            :id="block.post_cluster_data?.cluster_id_nav"
+                            v-html="renderMarkdown(block.content_text)"
+                        >
+                
+                          
                         </div>
 
-                        <p><b>Каждый шаг на пути к терапии — существенный этап, который помогает вернуть утраченный смысл существования и радость.</b></p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-13">
-                        <h2>Как помочь близкому человеку с признаками депрессии</h2>
-                        <p>Помощь родному человеку, страдающему депрессией, требует такта и времени. Важно помнить, что депрессия как расстройство — это болезнь, а не черта характера, поэтому поддержку следует оказывать без осуждения.</p>
-                    </div>
-
-                    <div class="text-editor__cluster" id="text-editor-cluster-14">
-                        <h2>Как распознать признаки депрессии у близкого</h2>
-                        <p>Родной человек, переживающий депрессию, не всегда прямо говорит о своих чувствах. Поэтому родным следует обращать внимание на изменения: постоянная подавленность, утрата интереса к любимым делам, стремление к уединению, частые жалобы на упадок сил или бессонницу, высказывания о том, что «ничего не радует» или «жизнь потеряла смысл». Если вы видите у человека такие симптомы, войдите в контакт и мягко поинтересуйтесь его самочувствием, придите на выручку.</p>
-                    </div>
-
-
-                    
+                        <div
+                            v-else-if="block.__component === 'shared.post-cluster-2-col'"
+                            class="text-editor__cluster"
+                            :id="block.cluster_title_nav?.cluster_id_nav"
+                        >
+                            <h2 v-if="block.cluster_title_nav?.cluster_title_nav">
+                                {{ block.cluster_title_nav.cluster_title_nav }}
+                            </h2>
+                            <div v-if="block.columns?.length" class="text-editor__two-col">
+                                <div
+                                    v-for="(column, columnIndex) in block.columns"
+                                    :key="column.id ?? columnIndex"
+                                    class="text-editor__col"
+                                    v-html="renderMarkdown(column.text)"
+                                ></div>
+                            </div>
+                        </div>
+                    </template>
                 </div>
 
                 <div class="post-content-sec__body-btn-row">
                     <btnCtrV3 :titleBtn="'Назад к списку'" :link="'/blog'" />
                 </div>
-
             </div>
         </div>
     </section>
@@ -237,8 +151,183 @@
 
 <script setup>
 import btnCtrV3 from '@/components/btn-ctr-v3.vue';
-import { ref } from 'vue';
+import MarkdownIt from 'markdown-it';
+import { onMounted, onUnmounted, ref } from 'vue';
 
-const btnMobPostMeny = ref(false)
+const md = new MarkdownIt();
+
+const config = useRuntimeConfig();
+const strapiUrl = config.public.strapiUrl;
+const route = useRoute();
+const slug = route.params.id;
+
+const { data: blogResponse } = await useFetch(`${strapiUrl}/api/blogs`, {
+    query: {
+        'filters[slug][$eq]': slug,
+        'populate[post_image]': true,
+        'populate[doctor][populate][photo]': true,
+        'populate[post_content_constuctor][on][shared.post-cluster-text][populate][post_cluster_data]': true,
+        'populate[post_content_constuctor][on][shared.post-cluster-2-col][populate][cluster_title_nav]': true,
+        'populate[post_content_constuctor][on][shared.post-cluster-2-col][populate][columns]': true,
+        'populate[Seo][populate][shareImage]': true,
+        'populate[Seo][populate][twitterImage]': true,
+    },
+});
+
+const post = blogResponse.value?.data?.[0];
+
+if (!post) {
+    throw createError({
+        statusCode: 404,
+        statusMessage: 'Статья не найдена',
+    });
+}
+
+function getStrapiMediaUrl(media) {
+    if (!media) {
+        return null;
+    }
+
+    const url = media.url ?? media.data?.url ?? media.attributes?.url;
+
+    if (!url) {
+        return null;
+    }
+
+    return url.startsWith('http') ? url : `${strapiUrl}${url}`;
+}
+
+function renderMarkdown(text) {
+    if (!text) {
+        return '';
+    }
+
+    return md.render(text);
+}
+
+const btnMobPostMeny = ref(false);
+const activeNavId = ref(null);
+const readProgress = ref(0);
+
+function getBlockNavId(block) {
+    if (block.__component === 'shared.post-cluster-text') {
+        return block.post_cluster_data?.cluster_id_nav ?? null;
+    }
+
+    if (block.__component === 'shared.post-cluster-2-col') {
+        return block.cluster_title_nav?.cluster_id_nav ?? null;
+    }
+
+    return null;
+}
+
+function getHeaderOffset() {
+    const header = document.querySelector('.header');
+
+    return header ? header.offsetHeight + 16 : 0;
+}
+
+function updateScrollState() {
+    const sectionIds = (post.post_content_constuctor ?? [])
+        .map(getBlockNavId)
+        .filter(Boolean);
+
+    if (!sectionIds.length) {
+        return;
+    }
+
+    const offset = getHeaderOffset() + 20;
+    let currentId = sectionIds[0];
+
+    for (const id of sectionIds) {
+        const element = document.getElementById(id);
+
+        if (element && element.getBoundingClientRect().top <= offset) {
+            currentId = id;
+        }
+    }
+
+    activeNavId.value = currentId;
+
+    const editor = document.querySelector('.text-editor');
+
+    if (!editor) {
+        return;
+    }
+
+    const headerOffset = getHeaderOffset();
+    const rect = editor.getBoundingClientRect();
+    const contentTop = window.scrollY + rect.top;
+    const contentHeight = rect.height;
+
+    if (!contentHeight) {
+        return;
+    }
+
+    const scrollPoint = window.scrollY + headerOffset;
+    const progress = ((scrollPoint - contentTop) / contentHeight) * 100;
+
+    readProgress.value = Math.min(100, Math.max(0, progress));
+}
+
+onMounted(() => {
+    const sectionIds = (post.post_content_constuctor ?? [])
+        .map(getBlockNavId)
+        .filter(Boolean);
+
+    activeNavId.value = sectionIds[0] ?? null;
+
+    updateScrollState();
+    window.addEventListener('scroll', updateScrollState, { passive: true });
+    window.addEventListener('resize', updateScrollState);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', updateScrollState);
+    window.removeEventListener('resize', updateScrollState);
+});
+
+const seo = post.Seo;
+const ogImage = getStrapiMediaUrl(seo?.shareImage);
+const twitterImage = getStrapiMediaUrl(seo?.twitterImage) || ogImage;
+const ogTitle = seo?.ogTitle || seo?.metaTitle;
+const ogDescription = seo?.ogDescription || seo?.metaDescription;
+const twitterTitle = seo?.twitterTitle || ogTitle;
+const twitterDescription = seo?.twitterDescription || ogDescription;
+
+useSeoMeta({
+    title: seo?.metaTitle,
+    description: seo?.metaDescription,
+    keywords: seo?.metaKeywords,
+    robots: seo?.metaRobots,
+    ogTitle,
+    ogDescription,
+    ogImage,
+    ogType: seo?.ogType,
+    ogLocale: seo?.ogLocale,
+    ogUrl: seo?.canonicalURL,
+    twitterCard: seo?.twitterCard,
+    twitterTitle,
+    twitterDescription,
+    twitterImage,
+    twitterSite: seo?.twitterSite,
+    twitterCreator: seo?.twitterCreator,
+});
+
+const headTags = {};
+
+if (seo?.canonicalURL) {
+    headTags.link = [{ rel: 'canonical', href: seo.canonicalURL }];
+}
+
+if (seo?.structuredData) {
+    headTags.script = [{
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(seo.structuredData),
+    }];
+}
+
+if (Object.keys(headTags).length) {
+    useHead(headTags);
+}
 </script>
-
