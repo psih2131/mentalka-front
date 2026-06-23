@@ -9,13 +9,13 @@
                       Профессиональная помощь в сфере психиатрии и психотерапии
                     </p> -->
                     <h1 class="hero-sec__title">
-                      Профессиональная помощь при тревожных и депрессивных расстройствах
+                      {{ heroSection.title_section }}
                     </h1>
                     <p class="hero-sec__text">
-                      Помогаем вернуть спокойствие, устойчивость и ясность. Психиатр, психотерапевт, диагностика и поддержка для взрослых и детей. Без постановки на учёт. 
+                      {{ heroSection.subtitle }}
                     </p>
                     <div class="hero-sec__buttons">
-                        <BtnCtrV1 :titleBtn="'Записаться на прием'" />
+                        <BtnCtrV1 :titleBtn="heroSection.button_text || 'Записаться на прием'" />
                     </div>
                 </div>
             </div>
@@ -24,49 +24,50 @@
 
     <section class="symptoms-sec">
       <div class="container">
-        <h2 class="symptoms-sec__title">Когда эмоциональное состояние начинает влиять на жизнь,
-          <b>многие из наших пациентов приходят с похожими ощущениями</b> </h2>
+        <h2 class="symptoms-sec__title">
+          <span v-html="symptomsSection.title_section"></span>
+        </h2>
         <div class="symptoms-sec__content">
           <div class="symptoms-sec__item">
             <img src="../assets/images/sympt-1.jpg" alt="" class="symptoms-sec__item-img">
-            <p class="symptoms-sec__item-title">Нет сил и ничего не радует</p>
-            <p class="symptoms-sec__item-text">С утра тяжело встать, пропал интерес к привычным вещам.</p>
+            <p class="symptoms-sec__item-title">{{ symptomsSection.card_1_title }}</p>
+            <p class="symptoms-sec__item-text">{{ symptomsSection.card_1_subtitle }}</p>
           </div>
 
           <div class="symptoms-sec__item">
             <img src="../assets/images/sympt-2.jpg" alt="" class="symptoms-sec__item-img">
-            <p class="symptoms-sec__item-title">Постоянная тревога или панические атаки</p>
-            <p class="symptoms-sec__item-text">Сердце колотится, сложно дышать, возникает страх без причины.</p>
+            <p class="symptoms-sec__item-title">{{ symptomsSection.card_2_title }}</p>
+            <p class="symptoms-sec__item-text">{{ symptomsSection.card_2_subtitle }}</p>
           </div>
 
           <div class="symptoms-sec__item">
             <img src="../assets/images/sympt-3.jpg" alt="" class="symptoms-sec__item-img">
-            <p class="symptoms-sec__item-title">Навязчивые мысли</p>
-            <p class="symptoms-sec__item-text">Мысли не отпускают, сложно переключиться и расслабиться.</p>
+            <p class="symptoms-sec__item-title">{{ symptomsSection.card_3_title }}</p>
+            <p class="symptoms-sec__item-text">{{ symptomsSection.card_3_subtitle }}</p>
           </div>
 
           <div class="symptoms-sec__item">
             <img src="../assets/images/sympt-4.jpg" alt="" class="symptoms-sec__item-img">
-            <p class="symptoms-sec__item-title">Чувство внутренней пустоты</p>
-            <p class="symptoms-sec__item-text">Всё вроде бы нормально, но внутри — тяжесть или безразличие.</p>
+            <p class="symptoms-sec__item-title">{{ symptomsSection.card_4_title }}</p>
+            <p class="symptoms-sec__item-text">{{ symptomsSection.card_4_subtitle }}</p>
           </div>
 
           <div class="symptoms-sec__item">
             <img src="../assets/images/sympt-5.jpg" alt="" class="symptoms-sec__item-img">
-            <p class="symptoms-sec__item-title">Трудно пережить расставание или потерю</p>
-            <p class="symptoms-sec__item-text">Боль не уменьшается, мешает жить и работать.</p>
+            <p class="symptoms-sec__item-title">{{ symptomsSection.card_5_title }}</p>
+            <p class="symptoms-sec__item-text">{{ symptomsSection.card_5_subtitle }}</p>
           </div>
 
           <div class="symptoms-sec__item">
             <img src="../assets/images/sympt-6.jpg" alt="" class="symptoms-sec__item-img">
-            <p class="symptoms-sec__item-title">Сложно справляться с ребёнком</p>
-            <p class="symptoms-sec__item-text">Поведение ребёнка тревожит, вы не понимаете, что происходит.</p>
+            <p class="symptoms-sec__item-title">{{ symptomsSection.card_6_title }}</p>
+            <p class="symptoms-sec__item-text">{{ symptomsSection.card_6_subtitle }}</p>
           </div>
         </div>
 
         <div class="symptoms-sec__btn-row">
           <button class="btn-ctr">
-              <span class="btn-ctr__text"> Записаться </span>
+              <span class="btn-ctr__text"> {{ symptomsSection.down_button_text || 'Записаться' }} </span>
               <span class="btn-ctr__ar">
                 <svg
                   width="6"
@@ -90,10 +91,11 @@
 
     <section class="team-sec">
       <div class="container">
-        <h2 class="team-sec__title">Команда клиники ментального здоровья, <span><br></span>
-          <b>врачи, которым важно не только лечение, но и поддержка</b></h2>
+        <h2 class="team-sec__title">
+          <span v-html="homeDoctorsSection.title"></span>
+        </h2>
           <p class="team-sec__text">
-            Врачи, которые берут на себя лечение пациентов любого возраста. Каждый из них обучен современным методикам коррекции расстройств, а также владеет навыками коммуникации с людьми, сталкивающимися с сильными эмоциональными потрясениями.
+            {{ homeDoctorsSection.subtitle }}
           </p>
           <nav class="team-sec__tab-nav team-sec__tab-nav--desk">
             <ul class="team-sec__tab-list">
@@ -139,49 +141,62 @@
 
           <div class="team-sec__content">
             <div class="team-sec__tab" v-if="currentTab === 1">
-              <SpecialistCard 
-                v-for="specialist in specialistsTab1" :key="specialist.id" 
-                :specialistData="specialist" />
+              <SpecialistCard
+                v-for="specialist in specialistsTab1"
+                :key="specialist.id"
+                :specialistData="specialist"
+              />
             </div>
 
             <div class="team-sec__tab" v-if="currentTab === 2">
-              <SpecialistCard 
-                v-for="specialist in specialistsTab2" :key="specialist.id" 
-                :specialistData="specialist" />
+              <SpecialistCard
+                v-for="specialist in specialistsTab2"
+                :key="specialist.id"
+                :specialistData="specialist"
+              />
             </div>
 
             <div class="team-sec__tab" v-if="currentTab === 3">
-              <SpecialistCard 
-                v-for="specialist in specialistsTab3" :key="specialist.id" 
-                :specialistData="specialist" />
+              <SpecialistCard
+                v-for="specialist in specialistsTab3"
+                :key="specialist.id"
+                :specialistData="specialist"
+              />
             </div>
 
             <div class="team-sec__tab" v-if="currentTab === 4">
-              <SpecialistCard 
-                v-for="specialist in specialistsTab4" :key="specialist.id" 
-                :specialistData="specialist" />
+              <SpecialistCard
+                v-for="specialist in specialistsTab4"
+                :key="specialist.id"
+                :specialistData="specialist"
+              />
             </div>
 
             <div class="team-sec__tab" v-if="currentTab === 5">
-              <SpecialistCard 
-                v-for="specialist in specialistsTab5" :key="specialist.id" 
-                :specialistData="specialist" />
-            </div> 
+              <SpecialistCard
+                v-for="specialist in specialistsTab5"
+                :key="specialist.id"
+                :specialistData="specialist"
+              />
+            </div>
 
 
           </div>
 
           <div class="team-sec__dop-info-row">
-            <p class="team-sec__dop-info-text">
-              В клинике работают 16 специалистов — врачи <span><br></span>
-и психотерапевты с подтверждённой квалификацией и опытом.
+            <p class="team-sec__dop-info-text"  v-html="homeDoctorsSection.down_text || ''">
+              
             </p>
 
             <NuxtLink to="/specialists" class="team-sec__more-doc">
               <span class="team-sec__more-docimg-cards">
-                <img src="../assets/images/specialists/spec-1.jpg" alt="" class="team-sec__more-doccards-img">
-                <img src="../assets/images/specialists/spec-2.jpg" alt="" class="team-sec__more-doccards-img">
-                <img src="../assets/images/specialists/spec-3.jpg" alt="" class="team-sec__more-doccards-img">
+                <img
+                  v-for="specialist in specialistsPreview"
+                  :key="specialist.id"
+                  :src="specialist.image"
+                  alt=""
+                  class="team-sec__more-doccards-img"
+                >
               </span>
               <span class="team-sec__more-doc-text">Смотреть всех специалистов</span>
             </NuxtLink>
@@ -194,24 +209,24 @@
       <img src="../assets/images/bg/home-bammer-sec-1-bg.png" alt="" class="home-banner-sec-1__bg-img">
       <div class="container">
         <h2 class="home-banner-sec-1__title">
-          Не знаете, к кому обратиться?
+          {{ pageHome.home_banner_section?.title }}
         </h2>
-        <p class="home-banner-sec-1__text">Ответьте на несколько вопросов — мы подскажем, какой специалист подойдёт именно вам.</p>
+        <p class="home-banner-sec-1__text">{{ pageHome.home_banner_section?.subtitle }}</p>
 
         <div class="home-banner-sec-1__buttons">
-          <BtnCtrV4 :titleBtn="'Пройти тест'" />
+          <BtnCtrV4 :titleBtn="pageHome.home_banner_section?.button_text || 'Пройти тест'" />
         </div>
       </div>
     </section>
 
     <section class="home-about-sec">
       <div class="container">
-        <img src="../assets/images/home-about.jpg" alt="" class="home-about-sec__img">
+        <img :src="aboutImageUrl" alt="" class="home-about-sec__img">
         <div class="home-about-sec__data">
           <h2 class="home-about-sec__title">МЕНТАЛКА - частная клиника ментального здоровья, 
 <b>индивидуальный подход 
   и клиническая точность</b></h2>
-  <img src="../assets/images/home-about.jpg" alt="" class="home-about-sec__img-mob">
+  <img :src="aboutImageUrl" alt="" class="home-about-sec__img-mob">
           
       <div class="home-about-sec__data-mob-wrapper">
         <div class="home-about-sec__slider-wrapper">
@@ -231,7 +246,7 @@
 
           </div>
           <div class="home-about-sec__down-row">
-            <BtnCtrV1 :titleBtn="'Подробнее о клинике'" :link="'/about'" />
+            <BtnCtrV1 :titleBtn="pageHome.home_about_section?.button_text || 'Подробнее о клинике'" :link="'/about'" />
             <div class="home-about-sec__slider-control-row">
               <div class="home-about-sec__prev" @click="swiperAboutGallery.prev()">
                 <svg width="21" height="69" viewBox="0 0 21 69" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -262,13 +277,12 @@
     <section class="directions-sec">
       <div class="container">
         <h2 class="directions-sec__title">
-          Направления работы клиники,<span><br></span> 
-          <b>медицинская помощь в сфере психического здоровья</b>
+          <span v-html="pageHome.home_direction_section?.section_title"></span>
         </h2>
         <div class="directions-sec__content">
           <DirectionsCard
             v-for="direction in directions"
-            :key="direction.title"
+            :key="direction.id"
             :title="direction.title"
             :text="direction.text"
             :link="direction.link"
@@ -280,13 +294,14 @@
 
     <section class="advantages-sec">
       <div class="container">
-        <h2 class="advantages-sec__title">Преимущества нашей клиники,<span><br></span> 
-          <b>ваше спокойствие — наша ответственность</b></h2>
+        <h2 class="advantages-sec__title">
+          <span v-html="pageHome.home_advantages_section?.section_title"></span>
+        </h2>
 
         <div class="advantages-sec__content">
           <div
             v-for="advantage in advantages"
-            :key="advantage.title"
+            :key="advantage.id"
             class="advantages-sec__item"
           >
             <p class="advantages-sec__item-title">{{ advantage.title }}</p>
@@ -299,8 +314,7 @@
     <section class="docs-slider-sec">
       <div class="container">
         <h2 class="docs-slider-sec__title">
-          Лицензированная медицинская деятельность,<span><br></span>
-  <b>работаем официально и соблюдаем требования законодательства РФ</b>
+          <span v-html="pageHome.home_docs_section?.section_slider"></span>
         </h2>
         <div class="docs-slider-sec__slider-wrapper">
           <ClientOnly>
@@ -348,26 +362,17 @@
     <section class="reviews-home-sec">
       <div class="container">
         <h2 class="reviews-home-sec__title">
-          Отзывы о клинике,<span><br></span>
-          <b>реальные истории пациентов о лечении и поддержке</b>
+          <span v-html="pageHome.home_reviews_section?.section_title"></span>
         </h2>
 
         <div class="reviews-home-sec__rate-row">
-          <div class="reviews-home-sec__rate-item">
-            <img src="../assets/images/logos/sber.png" alt="rate" class="reviews-home-sec__rate-item-logo">
-            <p class="reviews-home-sec__rate-item-count">4.1</p>
-          </div>
-          <div class="reviews-home-sec__rate-item">
-            <img src="../assets/images/logos/prod.png" alt="rate" class="reviews-home-sec__rate-item-logo">
-            <p class="reviews-home-sec__rate-item-count">4.8</p>
-          </div>
-          <div class="reviews-home-sec__rate-item">
-            <img src="../assets/images/logos/yandex.png" alt="rate" class="reviews-home-sec__rate-item-logo">
-            <p class="reviews-home-sec__rate-item-count">4.9</p>
-          </div>
-          <div class="reviews-home-sec__rate-item">
-            <img src="../assets/images/logos/2gis.png" alt="rate" class="reviews-home-sec__rate-item-logo">
-            <p class="reviews-home-sec__rate-item-count">4.4</p>
+          <div
+            v-for="item in reviewRates"
+            :key="item.name"
+            class="reviews-home-sec__rate-item"
+          >
+            <img v-if="item.logo" :src="item.logo" alt="rate" class="reviews-home-sec__rate-item-logo">
+            <p class="reviews-home-sec__rate-item-count">{{ item.rate }}</p>
           </div>
         </div>
 
@@ -437,14 +442,13 @@
     <section class="faq-sec">
       <div class="container">
         <h2 class="faq-sec__title">
-          Ответы на распространённые вопросы,<span><br></span>
-          <b>подробно о консультации, терапии и медицинской помощи</b>
+          <span v-html="pageHome.home_faq_section?.section_title"></span>
         </h2>
 
         <div class="faq-sec__content">
           <FaqItem
             v-for="(item, index) in faqItems"
-            :key="index"
+            :key="item.id ?? index"
             :question="item.question"
             :answer="item.answer"
           />
@@ -454,8 +458,8 @@
 
     <section class="blog-home-sec">
       <div class="container">
-        <h2 class="blog-home-sec__title">Блог клиники,<span><br></span>
-          <b>актуальные статьи о психиатрии и психотерапии</b>
+        <h2 class="blog-home-sec__title">
+          <span v-html="pageHome.home_blog_section?.section_title"></span>
         </h2>
 
         <div class="blog-home-sec__posts">
@@ -482,201 +486,253 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 
-import { ref, computed, onMounted, onUnmounted, nextTick } from "vue";
+import BtnCtrV1 from '@/components/btn-ctr-v1.vue';
+import BtnCtrV3 from '@/components/btn-ctr-v3.vue';
+import BtnCtrV4 from '@/components/btn-ctr-v4.vue';
+import SpecialistCard from '@/components/specialist-card.vue';
+import DirectionsCard from '@/components/directions-card.vue';
+import BannerV1 from '@/components/banner-v1.vue';
+import BannerV2 from '@/components/banner-v2.vue';
+import ReviewPopup from '@/components/review-popup.vue';
+import BlogPost from '@/components/blog-post.vue';
 
-import BtnCtrV1 from "@/components/btn-ctr-v1.vue";
-import BtnCtrV3 from "@/components/btn-ctr-v3.vue";
-import BtnCtrV4 from "@/components/btn-ctr-v4.vue";
 
-import SpecialistCard from "@/components/specialist-card.vue";
+const config = useRuntimeConfig();
+const strapiUrl = config.public.strapiUrl;
 
-import DirectionsCard from "@/components/directions-card.vue";
-
-import BannerV1 from "@/components/banner-v1.vue";
-
-import BannerV2 from "@/components/banner-v2.vue";
-
-import ReviewPopup from "@/components/review-popup.vue";
-
-import BlogPost from "@/components/blog-post.vue";
-
-import postImg1 from "@/assets/images/posts/post-1.jpg";
-import postImg2 from "@/assets/images/posts/post-2.jpg";
-import postImg3 from "@/assets/images/posts/post-3.jpg";
-
-const blogPosts = [
-    {
-        id: 1,
-        title: 'Как распознать депрессию: 10 признаков, на которые стоит обратить внимание',
-        text: 'Депрессия — не просто плохое настроение, а серьёзное расстройство, которое влияет на сон, аппетит, концентрацию и повседневную активность. Разбираем ключевые симптомы и рассказываем, когда пора обратиться к специалисту.',
-        img: postImg1,
-        date: '20.05.2026',
+const { data: pageHomeResponse } = await useFetch(`${strapiUrl}/api/page-home`, {
+    query: {
+        'populate[home_hero_section]': true,
+        'populate[home_symptoms_section]': true,
+        'populate[home_doctors_section]': true,
+        'populate[home_banner_section]': true,
+        'populate[home_about_section][populate][image]': true,
+        'populate[home_about_section][populate][text_slider]': true,
+        'populate[home_advantages_section][populate][advantages_list]': true,
+        'populate[home_blog_section][populate][blogs][populate][post_image]': true,
+        'populate[home_direction_section][populate][directions][populate][direction_patology_list]': true,
+        'populate[home_docs_section][populate][docs_images]': true,
+        'populate[home_reviews_section][populate][reviews][populate][reviews_category][populate][category_logo]': true,
+        'populate[home_faq_section][populate][faq_items]': true,
+        'populate[home_banner_down_section]': true,
+        'populate[home_footer_banner_section]': true,
+        'populate[Seo][populate][shareImage]': true,
+        'populate[Seo][populate][twitterImage]': true,
     },
-    {
-        id: 2,
-        title: 'Тревога без причины: что происходит с организмом и как с этим справиться',
-        text: 'Постоянное напряжение, учащённое сердцебиение и навязчивые мысли могут быть признаками тревожного расстройства. Объясняем, почему тревога возникает и какие методы помощи действительно работают.',
-        img: postImg2,
-        date: '12.05.2026',
-    },
-    {
-        id: 3,
-        title: 'Первый визит к психиатру: чего ожидать и как подготовиться',
-        text: 'Многие откладывают обращение за помощью из-за страха неизвестности. Рассказываем, как проходит первичная консультация, какие вопросы задаёт врач и что взять с собой на приём.',
-        img: postImg3,
-        date: '03.05.2026',
-    },
-];
+});
 
-const bannerData = ref({
-    title: "Не уверены, какая услуга вам подойдёт?",
-    text: "Мы подскажем, к какому специалисту лучше обратиться и уточним стоимость приёма.",
-    buttons: [
-        {
-            title: "Заполнить заявку",
-            link: "/consultation"
+const { data: doctorsResponse } = await useFetch(`${strapiUrl}/api/doctors`, {
+    query: {
+        'pagination[pageSize]': 100,
+        'populate[photo]': true,
+    },
+});
+
+function getStrapiMediaUrl(media) {
+    if (!media) {
+        return null;
+    }
+
+    const url = media.url ?? media.data?.url ?? media.attributes?.url;
+
+    if (!url) {
+        return null;
+    }
+
+    return url.startsWith('http') ? url : `${strapiUrl}${url}`;
+}
+
+function unwrapRelation(relation) {
+    if (!relation) {
+        return [];
+    }
+
+    const data = relation.data ?? relation;
+
+    if (!data) {
+        return [];
+    }
+
+    const list = Array.isArray(data) ? data : [data];
+    return list.map((item) => item.attributes ?? item);
+}
+
+function formatDate(value) {
+    if (!value) {
+        return '';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+        return '';
+    }
+
+    return date.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    });
+}
+
+function formatExperienceYears(years) {
+    if (years === null || years === undefined || years === '') {
+        return '';
+    }
+
+    const count = Math.floor(Number(years));
+    if (Number.isNaN(count)) {
+        return '';
+    }
+
+    const mod10 = count % 10;
+    const mod100 = count % 100;
+    let word = 'лет';
+
+    if (mod100 >= 11 && mod100 <= 14) {
+        word = 'лет';
+    } else if (mod10 === 1) {
+        word = 'год';
+    } else if (mod10 >= 2 && mod10 <= 4) {
+        word = 'года';
+    }
+
+    return `Стаж ${count} ${word}`;
+}
+
+const pageHomeItem = pageHomeResponse.value?.data;
+const pageHome = (pageHomeItem?.attributes ?? pageHomeItem) || {};
+
+const heroSection = pageHome.home_hero_section || {};
+const symptomsSection = pageHome.home_symptoms_section || {};
+const homeDoctorsSection = pageHome.home_doctors_section || {};
+
+const directions = unwrapRelation(pageHome.home_direction_section?.directions).map((item, index) => {
+    const tagsText = (item.direction_patology_list ?? [])
+        .map((tag) => tag.text)
+        .filter(Boolean)
+        .slice(0, 6)
+        .join(', ');
+
+    return {
+        id: item.id ?? index,
+        title: item.title,
+        text: item.short_description || tagsText,
+        link: item.slug ? `/services/${item.slug}` : '/services',
+    };
+});
+
+const advantages = (pageHome.home_advantages_section?.advantages_list ?? []).map((item, index) => ({
+    id: item.id ?? index,
+    title: item.title,
+    text: item.text,
+}));
+
+const docSlides = unwrapRelation(pageHome.home_docs_section?.docs_images)
+    .map((image) => getStrapiMediaUrl(image))
+    .filter(Boolean);
+
+const slides = (pageHome.home_about_section?.text_slider ?? [])
+    .map((item) => ({ text: item.text }))
+    .filter((item) => item.text);
+
+const aboutImageUrl = getStrapiMediaUrl(pageHome.home_about_section?.image);
+
+const faqItems = (pageHome.home_faq_section?.faq_items ?? []).map((item, index) => ({
+    id: item.id ?? index,
+    question: item.title,
+    answer: item.text,
+}));
+
+const blogPosts = unwrapRelation(pageHome.home_blog_section?.blogs).map((item, index) => ({
+    id: item.id ?? index,
+    title: item.post_title,
+    text: item.short_description,
+    img: getStrapiMediaUrl(item.post_image),
+    date: formatDate(item.publishedAt || item.createdAt),
+    slug: item.slug,
+}));
+
+const homeReviews = unwrapRelation(pageHome.home_reviews_section?.reviews).map((item, index) => {
+    const category = item.reviews_category?.data?.attributes
+        ?? item.reviews_category?.attributes
+        ?? item.reviews_category
+        ?? null;
+
+    return {
+        id: item.id ?? index,
+        name: item.autor_name,
+        date: formatDate(item.date),
+        logo: getStrapiMediaUrl(category?.category_logo),
+        text: item.review_text || '',
+        rate: Number(item.rate) || 0,
+        sourceName: category?.category_name || '',
+    };
+});
+
+const reviewRates = computed(() => {
+    const groups = new Map();
+
+    for (const review of homeReviews) {
+        if (!review.sourceName) {
+            continue;
         }
-    ]
+
+        if (!groups.has(review.sourceName)) {
+            groups.set(review.sourceName, { name: review.sourceName, logo: review.logo, total: 0, count: 0 });
+        }
+
+        const group = groups.get(review.sourceName);
+        group.total += review.rate || 0;
+        group.count += 1;
+    }
+
+    return Array.from(groups.values()).map((item) => ({
+        name: item.name,
+        logo: item.logo,
+        rate: item.count ? (item.total / item.count).toFixed(1) : '0.0',
+    }));
 });
 
-const bannerData2 = ref({
-    title: "Служба заботы о пациентах,<br> <b>ваше мнение помогает нам становиться лучше</b>",
-    text: "Мы ценим обратную связь и внимательно рассматриваем каждое обращение. Если у вас есть вопросы или предложения по работе клиники, напишите нам — мы обязательно ответим.",
-    email: "naturemind.msk@yandex.ru"
+function mapDoctorItem(item, index) {
+    return {
+        id: item.documentId ?? item.id ?? index,
+        slug: item.slug,
+        name: item.name,
+        position: item.specialization,
+        experience: formatExperienceYears(item.experience_years),
+        description: item.small_descriotion,
+        image: getStrapiMediaUrl(item.photo),
+    };
+}
+
+const doctors = unwrapRelation(doctorsResponse.value?.data).map(mapDoctorItem);
+
+function normalize(value) {
+    return (value || '').toLowerCase();
+}
+
+const specialistsByTab = computed(() => {
+    const all = doctors.slice(0, 3);
+    const psychiatrists = doctors.filter((item) => normalize(item.position).includes('психиатр')).slice(0, 3);
+    const psychologists = doctors
+        .filter((item) => {
+            const pos = normalize(item.position);
+            return pos.includes('психолог') || pos.includes('психотерапевт');
+        })
+        .slice(0, 3);
+    const child = doctors.filter((item) => normalize(item.position).includes('дет')).slice(0, 3);
+    const endocrinologists = doctors.filter((item) => normalize(item.position).includes('эндокринолог')).slice(0, 3);
+
+    return {
+        all,
+        psychiatrists,
+        psychologists,
+        child,
+        endocrinologists,
+    };
 });
-
-const directions = [
-    {
-        title: 'Психиатрия',
-        text: 'Диагностика и лечение психических расстройств у взрослых и подростков. Работаем с депрессией, биполярным расстройством, шизофренией, тревожными и другими тяжёлыми состояниями. Подбираем индивидуальную медикаментозную терапию и сопровождаем пациента на всех этапах лечения.',
-        link: '',
-    },
-    {
-        title: 'Психотерапия',
-        text: 'Индивидуальная и групповая психотерапия при тревожных расстройствах, фобиях, ПТСР, стрессах и неврозах. Используем доказательные методы, включая когнитивно-поведенческую терапию, семейные консультации и арт-терапию. Помогаем разобраться в причинах состояния и восстановить эмоциональную устойчивость.',
-        link: '',
-    },
-    {
-        title: 'Детская и подростковая психиатрия',
-        text: 'Помощь детям и подросткам при расстройствах поведения, аутистического спектра, СДВГ, тревожных и пищевых расстройствах. Консультации детского психиатра и психолога, поддержка родителей и разработка пошагового плана помощи.',
-        link: '',
-    },
-    {
-        title: 'Неврология',
-        text: 'Диагностика и лечение заболеваний нервной системы: мигрень, эпилепсия, последствия инсульта и черепно-мозговых травм, рассеянный склероз, нарушения сна. Ведём приём взрослых и детей, учитывая психоэмоциональное состояние пациента при подборе терапии.',
-        link: '',
-    },
-    {
-        title: 'Реабилитация',
-        text: 'Поддержка после сложных и затяжных психических расстройств. Помогаем восстановить социальную адаптацию, закрепить результат лечения и снизить риск рецидива. В программу могут входить психотерапия, трудотерапия и работа с родственниками.',
-        link: '',
-    },
-    {
-        title: 'Эндокринология',
-        text: 'Диагностика и лечение нарушений гормонального фона, включая сахарный диабет, заболевания щитовидной железы, надпочечников и гипофиза. Особое внимание уделяем психоэндокринным состояниям, депрессии на фоне гормонального дисбаланса и восстановлению общего метаболического здоровья.',
-        link: '',
-    },
-];
-
-const faqItems = [
-    {
-        question: 'С чего начать обращение в психиатрическую клинику?',
-        answer: 'Начать можно с записи на первичную консультацию специалиста. На первом приёме врач-психиатр или психотерапевт проводит беседу, уточняет симптомы, собирает анамнез и оценивает общее психоэмоциональное состояние пациента. При необходимости могут быть рекомендованы дополнительные обследования или консультации смежных специалистов. После диагностики врач подбирает индивидуальный план лечения, который может включать психотерапию, медикаментозную поддержку или комплексную программу восстановления. В частной психиатрической клинике в Москве приём проходит конфиденциально и в комфортной атмосфере, что помогает пациенту спокойно обсудить своё состояние и получить профессиональную помощь.',
-    },
-    {
-        question: 'Нужно ли направление от врача, чтобы записаться на приём?',
-        answer: 'Нет, направление не требуется. В частной клинике вы можете записаться на приём самостоятельно — по телефону, через форму на сайте или в мессенджере. Достаточно описать причину обращения, и администратор подберёт подходящего специалиста и удобное время. Если у вас уже есть результаты обследований или выписки от других врачей, возьмите их с собой — это поможет ускорить диагностику, но не является обязательным условием для записи.',
-    },
-    {
-        question: 'Поставят ли меня на учёт после обращения в клинику?',
-        answer: 'Обращение в частную психиатрическую клинику не влечёт постановки на учёт в диспансер. Мы работаем на основании договора об оказании платных медицинских услуг, и информация о пациенте не передаётся в государственные учреждения без его письменного согласия. Исключение — ситуации, когда закон прямо обязывает врача сообщить о риске для жизни пациента или окружающих. Во всех остальных случаях ваше обращение остаётся конфиденциальным.',
-    },
-    {
-        question: 'Обязательно ли принимать медикаменты?',
-        answer: 'Нет, назначение препаратов — не обязательный этап лечения. Решение принимается совместно с врачом на основе диагностики, тяжести симптомов и ваших предпочтений. Во многих случаях достаточно психотерапии, работы с образом жизни и регулярных консультаций. Если медикаментозная поддержка всё же рекомендована, врач подробно объяснит, зачем нужен препарат, какие эффекты ожидать и какие есть альтернативы. Вы всегда можете обсудить сомнения и скорректировать план лечения.',
-    },
-    {
-        question: 'Как проходит первичная консультация?',
-        answer: 'Первичный приём длится 50–60 минут. Врач знакомится с вами, уточняет жалобы, историю состояния, особенности сна, настроения и повседневной активности. При необходимости проводится краткая диагностическая беседа и оценка текущего риска. По итогам вы получаете понятные рекомендации: нужны ли дополнительные обследования, какой формат помощи подойдёт и с какой периодичностью имеет смысл продолжать визиты. Темп беседы выбираете вы — можно делиться только тем, чем готовы поделиться на данном этапе.',
-    },
-    {
-        question: 'Сколько длится лечение?',
-        answer: 'Сроки индивидуальны и зависят от диагноза, тяжести симптомов и выбранного формата помощи. Краткосрочная поддержка при остром стрессе может занять несколько встреч, тогда как работа с хронической тревогой, депрессией или расстройствами привычек обычно рассчитана на месяцы. Врач заранее обсуждает ориентировочный план и регулярно пересматривает его по мере улучшения состояния. Цель — не бесконечное лечение, а устойчивое улучшение качества жизни.',
-    },
-    {
-        question: 'Можно ли обратиться анонимно?',
-        answer: 'Да, вы можете записаться под именем, которым вам комфортно пользоваться на приёме, без предъявления документов. Для оформления договора и оплаты потребуется минимум контактных данных, но мы не передаём их третьим лицам. Анонимная консультация подходит, если вы хотите сначала обсудить ситуацию и понять, нужна ли дальнейшая помощь. Обратите внимание: при назначении рецептурных препаратов по закону может потребоваться подтверждение личности.',
-    },
-    {
-        question: 'Принимаете ли вы детей и подростков?',
-        answer: 'Да, в клинике ведут приём детские и подростковые психиатры и психотерапевты. Для несовершеннолетних обязательно присутствие одного из родителей или законного представителя на первичной консультации. Мы работаем с тревожностью, проблемами в школе, трудностями адаптации, нарушениями сна и поведения, а также с эмоциональными переживаниями подросткового возраста. Подход выбирается с учётом возраста ребёнка — от игровой терапии до когнитивно-поведенческих методик.',
-    },
-    {
-        question: 'Можно ли записаться онлайн без звонка?',
-        answer: 'Да, на сайте доступна онлайн-запись: выберите специалиста, удобную дату и время, оставьте контактные данные — администратор подтвердит запись в течение рабочего дня. Также можно написать в чат на сайте или в мессенджер, если удобнее обсудить детали в переписке. Звонок не обязателен, но по телефону администратор сможет быстрее подобрать врача под ваш запрос.',
-    },
-    {
-        question: 'Какие документы нужно взять на приём?',
-        answer: 'Для первого визита желательно иметь при себе паспорт и полис ДМС, если планируете оплату через страховую компанию. Если вы уже проходили обследования — возьмите результаты анализов, выписки, заключения других специалистов и список принимаемых препаратов. Это необязательно, но ускоряет диагностику. Для детей — свидетельство о рождении или паспорт ребёнка и документ, подтверждающий полномочия сопровождающего взрослого.',
-    },
-    {
-        question: 'Какие способы оплаты доступны?',
-        answer: 'Принимаем оплату наличными и банковскими картами в клинике, а также безналичным переводом по реквизитам. Доступна оплата через ДМС — уточните у администратора, входит ли ваша страховая программа в список партнёров. Перед приёмом можно запросить счёт на юридическое лицо, если оплату организует работодатель. Стоимость консультаций и программ лечения указана в прайсе на сайте, окончательная сумма зависит от выбранного формата помощи.',
-    },
-];
-
-const advantages = [
-    {
-        title: 'Анонимность и конфиденциальность',
-        text: '100% приватность лечения. Мы не ставим пациентов на учет и не разглашаем сведения об обращении. Соблюдаем принцип врачебной тайны, чтобы человек мог сосредоточиться на решении своих проблем без страха за распространение информации',
-    },
-    {
-        title: 'Высококвалифицированные специалисты',
-        text: 'Каждый врач прошел многолетнюю практику, регулярно участвует в обучениях и научных исследованиях. Мы тщательно следим за повышением квалификации, поэтому используем современные подходы и осознанную эмпатию в лечении даже сложных форм психических расстройств',
-    },
-    {
-        title: 'Индивидуальный комплексный подход',
-        text: 'Мы составляем план терапии с учетом личной истории расстройства, используя медикаментозные методики, психотерапевтические практики и дополнительные реабилитационные меры. Такой подход ускоряет достижение длительной ремиссии',
-    },
-    {
-        title: 'Персонализированные подходы и передовые методики',
-        text: 'Применяем принцип доказательности на всех этапах лечения: от диагностики до закрепления результата. Используем актуальные психофармакологические препараты, когнитивно-поведенческие и другие виды психотерапии, соответствующие международным стандартам',
-    },
-    {
-        title: 'Официальная лицензия и надежность',
-        text: 'Наш центр имеет необходимые разрешительные документы для осуществления медицинской деятельности. Мы строго соблюдаем протоколы Министерства здравоохранения РФ и входим в профессиональные сообщества специалистов, что подтверждает нашу надежность',
-    },
-];
-
-import specImg1 from "@/assets/images/specialists/spec-1.jpg";
-import specImg2 from "@/assets/images/specialists/spec-2.jpg";
-import specImg3 from "@/assets/images/specialists/spec-3.jpg";
-import specImg4 from "@/assets/images/specialists/spec-4.jpg";
-import specImg5 from "@/assets/images/specialists/spec-5.jpg";
-import specImg6 from "@/assets/images/specialists/spec-6.jpg";
-import specImg7 from "@/assets/images/specialists/spec-7.jpg";
-
-
-import imgDoc1 from "@/assets/images/docs/doc-1.png";
-import imgDoc2 from "@/assets/images/docs/doc-2.png";
-import imgDoc3 from "@/assets/images/docs/doc-3.png";
-import imgDoc4 from "@/assets/images/docs/doc-4.png";
-import imgDoc5 from "@/assets/images/docs/doc-5.png";
-import imgDoc6 from "@/assets/images/docs/doc-6.png";
-
-import logoYandex from "@/assets/images/logos/yandex.png";
-import logoSber from "@/assets/images/logos/sber.png";
-import logoProd from "@/assets/images/logos/prod.png";
-import logo2gis from "@/assets/images/logos/2gis.png";
-
-const docSlides = [imgDoc1, imgDoc2, imgDoc3, imgDoc4, imgDoc5, imgDoc6];
-
-const specialistsTab1 = ref([]);
-const specialistsTab2 = ref([]);
-const specialistsTab3 = ref([]);
-const specialistsTab4 = ref([]);
-const specialistsTab5 = ref([]);
 
 const teamTabs = [
     { id: 1, title: 'Все специалисты' },
@@ -693,23 +749,53 @@ const currentTabTitle = computed(() => {
     return teamTabs.find((tab) => tab.id === currentTab.value)?.title ?? '';
 });
 
+const specialistsTab1 = computed(() => specialistsByTab.value.all);
+const specialistsTab2 = computed(() => specialistsByTab.value.psychiatrists);
+const specialistsTab3 = computed(() => specialistsByTab.value.psychologists);
+const specialistsTab4 = computed(() => specialistsByTab.value.child);
+const specialistsTab5 = computed(() => specialistsByTab.value.endocrinologists);
+const specialistsPreview = computed(() => specialistsByTab.value.all.slice(0, 3));
+
 const selectTeamTab = (id) => {
     currentTab.value = id;
     isTabSelectOpen.value = false;
 };
 
-const slides = [
-    {
-        text: 'Частная психиатрическая клиника МЕНТАЛКА в Москве — это специализированное медицинское учреждение психиатрического профиля, которое ведет прием взрослых и детей с любыми психическими расстройствами. Мы стремимся к тому, чтобы каждый пациент получал комплексное лечение с упором на реальную пользу и долгосрочный результат. Наши специалисты — это врачи высшей категории, у которых за плечами многолетний опыт работы и искренняя готовность вникнуть в проблемы каждого обратившегося. Мы уделяем особое внимание инновациям: внедряем современные методы лечения и придерживаемся международных стандартов.',
-    },
-    {
-        text: 'В частной клинике МЕНТАЛКА создана спокойная среда: просторные помещения, доброжелательные сотрудники, заботливый персонал, отвечающий за безопасность внутренних процессов. Здесь можно получить поддержку квалифицированных психологов и психотерапевтов. Каждый вопрос решается в режиме максимальной конфиденциальности: мы не передаем данные пациентов третьим лицам, не ставим на учет и обеспечиваем соблюдение врачебной тайны.',
-    },
-    {
-        text: 'Мы понимаем, что расстройство психики не всегда ограничивается одной проблемой, поэтому обеспечиваем комплекс, который охватывает и медикаментозную терапию, и психотерапию, и социореабилитационные меры. При этом мы ставим во главу угла индивидуальную специфику пациентов: их возраст, диагноз, степень тяжести состояния и личную готовность к восстановлению. Для нас главное — помочь человеку вернуться к стабильной жизни, сняв острую симптоматику и выстроив фундамент для долгосрочного душевного здоровья.',
-    },
-];
+const bannerData = computed(() => {
+    const section = pageHome.home_banner_down_section;
 
+    if (!section) {
+        return { title: '', text: '', buttons: [] };
+    }
+
+    return {
+        title: section.title,
+        text: section.subtitle,
+        buttons: section.button_text ? [{ title: section.button_text, link: '/consultation' }] : [],
+    };
+});
+
+const bannerData2 = computed(() => {
+    const section = pageHome.home_footer_banner_section;
+
+    if (!section) {
+        return { title: '', text: '', email: '' };
+    }
+
+    return {
+        title: section.title_sec,
+        text: section.text,
+        email: section.email,
+    };
+});
+
+const selectedReview = ref(null);
+
+function openReviewPopup(review) {
+    selectedReview.value = review;
+}
+
+const swiperAbout = ref(null);
 const currentAboutSlide = ref(1);
 
 function onAboutSlideChange(event) {
@@ -719,7 +805,7 @@ function onAboutSlideChange(event) {
 
 const swiperDocs = ref(null);
 const currentDocsSlide = ref(1);
-const docsTotalPages = ref(2);
+const docsTotalPages = ref(1);
 
 function onDocsSlideChange(event) {
     const [swiper] = event.detail;
@@ -732,81 +818,55 @@ function onDocsSwiperInit(event) {
     docsTotalPages.value = swiper.snapGrid.length;
 }
 
+const swiperReviews = ref(null);
+const currentReviewsSlide = ref(1);
+const reviewsTotalPages = ref(1);
+
+function equalizeReviewsSlideHeight() {
+    if (window.innerWidth <= 760) return;
+
+    const container = swiperReviews.value;
+    if (!container) return;
+
+    const cards = container.querySelectorAll('.reviews-home-sec__slide');
+    if (!cards.length) return;
+
+    cards.forEach((card) => {
+        card.style.minHeight = '';
+    });
+
+    let maxHeight = 0;
+    cards.forEach((card) => {
+        maxHeight = Math.max(maxHeight, card.offsetHeight);
+    });
+
+    if (!maxHeight) return;
+
+    cards.forEach((card) => {
+        card.style.minHeight = `${maxHeight}px`;
+    });
+}
+
+function onReviewsSlideChange(event) {
+    const [swiper] = event.detail;
+    currentReviewsSlide.value = swiper.snapIndex + 1;
+    reviewsTotalPages.value = swiper.snapGrid.length;
+}
+
+function onReviewsSwiperInit(event) {
+    const [swiper] = event.detail;
+    reviewsTotalPages.value = swiper.snapGrid.length;
+    nextTick(() => {
+        equalizeReviewsSlideHeight();
+        swiper.update();
+    });
+}
+
+function onReviewsSwiperResize() {
+    nextTick(equalizeReviewsSlideHeight);
+}
+
 onMounted(() => {
-    specialistsTab1.value = [
-        {
-            id: 1,
-            name: "Полле Михаил Игоревич",
-            position: "Врач-психиатр детский",
-            experience: "Стаж 12 лет",
-            description:
-                "Помогает ребенку справиться с тревогой, СДВГ или аутизмом, объясняя родителям пошаговый план домашних действий.",
-            image: specImg1,
-        },
-        {
-            id: 2,
-            name: "Лапук Дарья Дмитриевна",
-            position: "Врач-психиатр",
-            experience: "Стаж 3 года",
-            description:
-                "Помогает взрослым вернуть душевное равновесие при тревожных и аффективных расстройствах, психозах и деменции.",
-            image: specImg2,
-        },
-        {
-            id: 3,
-            name: "Соколова Александра Владимировна",
-            position: "Врач-психиатр, врач-психиатр детский",
-            experience: "Стаж 4 года",
-            description:
-                "Помогает детям, подросткам и взрослым с психическими расстройствами — от тревоги до аутизма.",
-            image: specImg3,
-        },
-        
-    ];
-    specialistsTab2.value = [
-        {
-            id: 4,
-            name: "Азнаварян Карен Арменович",
-            position: "Врач-эндокринолог детский",
-            experience: "Стаж 6 лет",
-            description:
-                "Помогает детям и подросткам с гормональными нарушениями — от дефицита веса до раннего полового созревания.",
-            image: specImg4,
-        },
-    ];
-    specialistsTab3.value = [
-        {
-            id: 5,
-            name: "Свиридова Анастасия Борисовна",
-            position: "Врач-эндокринолог",
-            experience: "Стаж 3 года",
-            description:
-                "Помогает взрослым с эндокринными нарушениями — от диабета до заболеваний щитовидной железы и надпочечников.",
-            image: specImg5,
-        },
-    ];
-    specialistsTab4.value = [
-        {
-            id: 6,
-            name: "Андрианова Ольга Владиславовна",
-            position: "Врач-психиатр, психотерапевт",
-            experience: "Стаж 4 года",
-            description:
-                "Помогает преодолеть депрессию, тревогу и расстройства пищевого поведения, используя научные методы терапии.",
-            image: specImg6,
-        },
-    ];
-    specialistsTab5.value = [
-        {
-            id: 7,
-            name: "Медведев Сергей Александрович",
-            position: "Врач-психиатр и психотерапевт",
-            experience: "Стаж 11 лет",
-            description:
-                "Принимает подростков от 15 лет и взрослых. Работает в доказательном формате, комбинируя краткосрочные и глубинные методы психотерапии.",
-            image: specImg7,
-        },
-    ];
     window.addEventListener('resize', equalizeReviewsSlideHeight);
 });
 
@@ -814,34 +874,25 @@ onUnmounted(() => {
     window.removeEventListener('resize', equalizeReviewsSlideHeight);
 });
 
-
-const swiperAbout = ref(null);
-
-//categoryes gallery
-const  swiperAboutGallery  = useSwiper(swiperAbout, {
-   loop: false,
-   slidesPerView: 1,
-   spaceBetween: 30,  
-   autoHeight: true, 
-   speed: 600,
-   freeMode: {
-    enabled: true,
-    sticky: true,
-  },
-   slidesPerView: "auto",
-  //  centeredSlides: 'auto',
-   breakpoints: {
-    100: {
-      slidesPerView: 1,
-      spaceBetween: 20,
-      loop: false,
-      speed: 500,
-      
+const swiperAboutGallery = useSwiper(swiperAbout, {
+    loop: false,
+    slidesPerView: 'auto',
+    spaceBetween: 30,
+    autoHeight: true,
+    speed: 600,
+    freeMode: {
+        enabled: true,
+        sticky: true,
     },
-
-  },
-
-})
+    breakpoints: {
+        100: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: false,
+            speed: 500,
+        },
+    },
+});
 
 const swiperDocsGallery = useSwiper(swiperDocs, {
     loop: false,
@@ -871,106 +922,7 @@ const swiperDocsGallery = useSwiper(swiperDocs, {
             spaceBetween: 20,
         },
     },
-})
-
-const homeReviews = [
-    {
-        id: 1,
-        name: 'Татьяна',
-        date: '22 сентября 2025',
-        logo: logoYandex,
-        text: 'Спасибо за помощь! Это мой первый опыт обращения к психиатру. Приходил с ощущением, что «накрывает», тревога была постоянной, на работе и дома сложно было сосредоточиться. Добавились навязчивые мысли и бессонница — как будто голова не выключалась. На приёме доктор выслушала, задавала вопросы по делу, спокойно объясняла варианты и риски. Чувствую себя лучше, появились силы и ясность — сейчас постепенно возвращаюсь к нормальной жизни. Для меня главное, что к врачам можно обратиться без страха осуждения, и что лечение не сводится к «просто взять себя в руки». Рекомендую этот центр, если нужен профессиональный и внимательный подход.',
-    },
-    {
-        id: 2,
-        name: 'Анна',
-        date: '12 февраля 2026',
-        logo: logoProd,
-        text: 'Обратилась с тревожным состоянием, долго не могла решиться. Врач очень внимательно выслушала, всё подробно объяснила и назначила лечение. Уже через пару недель почувствовала улучшение. Спасибо за бережный подход.',
-    },
-    {
-        id: 3,
-        name: 'Екатерина Л.',
-        date: '14 февраля 2026',
-        logo: logoSber,
-        text: 'Обратилась в клинику в состоянии сильной тревоги и эмоционального выгорания, долго откладывала визит, потому что было много страхов и сомнений. С первых минут приёма почувствовала спокойную и поддерживающую атмосферу — врач очень внимательно выслушала, задала уточняющие вопросы и помогла структурировать всё, что происходило со мной в последнее время.',
-    },
-    {
-        id: 4,
-        name: 'Михаил',
-        date: '3 января 2026',
-        logo: logo2gis,
-        text: 'Проходил лечение у психиатра и психотерапевта. Очень понравился системный подход: сначала диагностика, потом план, потом регулярные встречи. Стало заметно легче справляться с тревогой и вернуться к работе.',
-    },
-    {
-        id: 5,
-        name: 'Ольга',
-        date: '18 декабря 2025',
-        logo: logoYandex,
-        text: 'Привела ребёнка к детскому психиатру. Врач нашла контакт с сыном, объяснила нам родителям, что происходит, и составила понятный план помощи. Атмосфера в клинике спокойная, без давления.',
-    },
-    {
-        id: 6,
-        name: 'Дмитрий',
-        date: '5 ноября 2025',
-        logo: logoProd,
-        text: 'Долго не мог найти врача, который бы не просто назначил таблетки, а объяснил, что со мной происходит. Здесь именно так и работают — с уважением, внимательно, с реальным результатом.',
-    },
-];
-
-const selectedReview = ref(null);
-
-function openReviewPopup(review) {
-    selectedReview.value = review;
-}
-
-const swiperReviews = ref(null);
-const currentReviewsSlide = ref(1);
-const reviewsTotalPages = ref(1);
-
-function equalizeReviewsSlideHeight() {
-    if (window.innerWidth <= 760) return;
-
-    const container = swiperReviews.value;
-    if (!container) return;
-
-    const slides = container.querySelectorAll('.reviews-home-sec__slide');
-    if (!slides.length) return;
-
-    slides.forEach((slide) => {
-        slide.style.minHeight = '';
-    });
-
-    let maxHeight = 0;
-    slides.forEach((slide) => {
-        maxHeight = Math.max(maxHeight, slide.offsetHeight);
-    });
-
-    if (!maxHeight) return;
-
-    slides.forEach((slide) => {
-        slide.style.minHeight = `${maxHeight}px`;
-    });
-}
-
-function onReviewsSlideChange(event) {
-    const [swiper] = event.detail;
-    currentReviewsSlide.value = swiper.snapIndex + 1;
-    reviewsTotalPages.value = swiper.snapGrid.length;
-}
-
-function onReviewsSwiperInit(event) {
-    const [swiper] = event.detail;
-    reviewsTotalPages.value = swiper.snapGrid.length;
-    nextTick(() => {
-        equalizeReviewsSlideHeight();
-        swiper.update();
-    });
-}
-
-function onReviewsSwiperResize() {
-    nextTick(equalizeReviewsSlideHeight);
-}
+});
 
 const swiperReviewsGallery = useSwiper(swiperReviews, {
     loop: false,
@@ -995,6 +947,49 @@ const swiperReviewsGallery = useSwiper(swiperReviews, {
             spaceBetween: 20,
         },
     },
-})
+});
 
+const seo = pageHome.Seo;
+const ogImage = getStrapiMediaUrl(seo?.shareImage);
+const twitterImage = getStrapiMediaUrl(seo?.twitterImage) || ogImage;
+const ogTitle = seo?.ogTitle || seo?.metaTitle;
+const ogDescription = seo?.ogDescription || seo?.metaDescription;
+const twitterTitle = seo?.twitterTitle || ogTitle;
+const twitterDescription = seo?.twitterDescription || ogDescription;
+
+useSeoMeta({
+    title: seo?.metaTitle,
+    description: seo?.metaDescription,
+    keywords: seo?.metaKeywords,
+    robots: seo?.metaRobots,
+    ogTitle,
+    ogDescription,
+    ogImage,
+    ogType: seo?.ogType,
+    ogLocale: seo?.ogLocale,
+    ogUrl: seo?.canonicalURL,
+    twitterCard: seo?.twitterCard,
+    twitterTitle,
+    twitterDescription,
+    twitterImage,
+    twitterSite: seo?.twitterSite,
+    twitterCreator: seo?.twitterCreator,
+});
+
+const headTags = {};
+
+if (seo?.canonicalURL) {
+    headTags.link = [{ rel: 'canonical', href: seo.canonicalURL }];
+}
+
+if (seo?.structuredData) {
+    headTags.script = [{
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(seo.structuredData),
+    }];
+}
+
+if (Object.keys(headTags).length) {
+    useHead(headTags);
+}
 </script>

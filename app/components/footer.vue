@@ -4,7 +4,7 @@
       <div class="container">
         <a href="" class="footer__logo">
           <img
-            src="../assets/images/header-logo.png"
+            :src="footerData.logoUrl"
             alt=""
             class="footer__logo-img"
           />
@@ -13,25 +13,23 @@
         <div class="footer__contact-row">
           <div class="footer__contact-element">
             <p class="footer__contact-element-data">
-              <a href="tel:+7 (495) 215-25-51">+7 (495) 215-25-51</a>
+              <a :href="footerData.phoneHref">{{ footerData.phone }}</a>
             </p>
             <p class="footer__contact-element-description">
-              ежедневно 09:00–21:00
+              {{ footerData.timeWork }}
             </p>
           </div>
 
           <div class="footer__contact-element">
-            <p class="footer__contact-element-data">ул. Высокая 4</p>
+            <p class="footer__contact-element-data">{{ footerData.address1 }}</p>
             <p class="footer__contact-element-description">
-              г. Москва, м. Коломенская
+              {{ footerData.address2 }}
             </p>
           </div>
 
           <div class="footer__contact-element">
             <p class="footer__contact-element-data">
-              <a href="mailto:naturemind.msk@yandex.ru"
-                >naturemind.msk@yandex.ru</a
-              >
+              <a :href="footerData.emailHref">{{ footerData.email }}</a>
             </p>
             <p class="footer__contact-element-description">
               отправить нам письмо
@@ -121,9 +119,13 @@
         <div class="footer__middle-nav footer__middle-nav--v3">
           <p class="footer__middle-nav-title">Юридическая информация</p>
           <div class="footer__middle-legals">
-            <p class="footer__middle-legal-text">ООО «ПРИРОДА РАЗУМА»</p>
-            <p class="footer__middle-legal-text">ИНН 9725177812</p>
-            <p class="footer__middle-legal-text">ОГРН 1257700052664</p>
+            <p
+              v-for="(codeItem, index) in footerData.codes"
+              :key="`footer-code-${index}`"
+              class="footer__middle-legal-text"
+            >
+              {{ codeItem }}
+            </p>
           </div>
 
           <ul class="footer__middle-nav-list-small">
@@ -145,7 +147,7 @@
         <div class="footer__down-copy">
           <p>2026</p>
           <p>Клиника «МЕНТАЛКА»</p>
-          <p>мед. лицензия № Л041-01137-77/02479950 от 18.06.2025</p>
+          <p>{{ footerData.medicalLicense }}</p>
         </div>
 
         <nav class="footer__down-nav">
@@ -164,8 +166,7 @@
       </div>
       <div class="container footer__down-container-mob">
         <p class="footer__down-text">
-          мед. лицензия №<br />
-          Л041-01137-77/02479950 от 18.06.2025
+          {{ footerData.medicalLicense }}
         </p>
 
         <p class="footer__down-text footer__down-text--right">
@@ -180,6 +181,32 @@
 <script setup>
 const config = useRuntimeConfig();
 const strapiUrl = config.public.strapiUrl;
+const defaultFooterLogoUrl = new URL('../assets/images/header-logo.png', import.meta.url).href;
+
+const defaultFooterData = {
+  phone: '+7 (495) 215-25-51',
+  phoneLink: '+74952152551',
+  timeWork: 'ежедневно 09:00–21:00',
+  address1: 'ул. Высокая 4',
+  address2: 'г. Москва, м. Коломенская',
+  email: 'naturemind.msk@yandex.ru',
+  codes: ['ООО «ПРИРОДА РАЗУМА»', 'ИНН 9725177812', 'ОГРН 1257700052664'],
+  medicalLicense: 'мед. лицензия № Л041-01137-77/02479950 от 18.06.2025',
+};
+
+const { data: footerResponse } = useFetch(`${strapiUrl}/api/footer-component`, {
+  query: {
+    'fields[0]': 'phone',
+    'fields[1]': 'phone_link',
+    'fields[2]': 'time_work',
+    'fields[3]': 'address_1',
+    'fields[4]': 'address_2',
+    'fields[5]': 'email',
+    'fields[6]': 'medical_license',
+    'populate[logo]': true,
+    'populate[codes]': true,
+  },
+});
 
 const { data: docsPagesResponse } = useFetch(`${strapiUrl}/api/docs-pages`, {
   query: {
@@ -195,6 +222,50 @@ const { data: directionsResponse } = useFetch(`${strapiUrl}/api/directions`, {
     'fields[1]': 'slug',
     'pagination[pageSize]': 100,
   },
+});
+
+function getStrapiMediaUrl(media) {
+  const source = media?.data?.attributes ?? media?.data ?? media;
+  const url = source?.url;
+
+  if (!url) {
+    return '';
+  }
+
+  if (/^https?:\/\//i.test(url)) {
+    return url;
+  }
+
+  return `${strapiUrl}${url}`;
+}
+
+const footerAttributes = computed(() => {
+  return footerResponse.value?.data?.attributes ?? footerResponse.value?.data ?? {};
+});
+
+const footerData = computed(() => {
+  const attrs = footerAttributes.value;
+  const codes = (attrs.codes ?? [])
+    .map((item) => {
+      const codeAttrs = item?.attributes ?? item ?? {};
+      return codeAttrs.text;
+    })
+    .filter(Boolean);
+  const phoneLinkValue = attrs.phone_link || defaultFooterData.phoneLink;
+  const emailValue = attrs.email || defaultFooterData.email;
+
+  return {
+    logoUrl: getStrapiMediaUrl(attrs.logo) || defaultFooterLogoUrl,
+    phone: attrs.phone || defaultFooterData.phone,
+    phoneHref: phoneLinkValue.startsWith('tel:') ? phoneLinkValue : `tel:${phoneLinkValue}`,
+    timeWork: attrs.time_work || defaultFooterData.timeWork,
+    address1: attrs.address_1 || defaultFooterData.address1,
+    address2: attrs.address_2 || defaultFooterData.address2,
+    email: emailValue,
+    emailHref: emailValue.startsWith('mailto:') ? emailValue : `mailto:${emailValue}`,
+    codes: codes.length ? codes : defaultFooterData.codes,
+    medicalLicense: attrs.medical_license || defaultFooterData.medicalLicense,
+  };
 });
 
 const docsPages = computed(() => {

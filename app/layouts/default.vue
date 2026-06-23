@@ -5,6 +5,7 @@
     <slot />
 
     <footerComponent :dataContacts="aboutData" />
+    <SocialsWidget />
 
     <ModalsRoot />
   </div>
@@ -14,4 +15,5 @@
 import headerComponent from "@/components/header.vue";
 import footerComponent from "@/components/footer.vue";
 import ModalsRoot from "@/components/modals/modals-root.vue";
+import SocialsWidget from "@/components/socials-widget.vue";
 </script>

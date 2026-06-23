@@ -74,7 +74,7 @@
               fill="#317844"
             />
           </svg>
-          <span>Москва, м. Коломенская, ул. Высокая, 4</span>
+          <span>{{ headerData.address }}</span>
         </div>
 
         <div class="header__time">
@@ -105,7 +105,7 @@
               </clipPath>
             </defs>
           </svg>
-          <span>ежедневно 9:00–21:00</span>
+          <span>{{ headerData.timeWork }}</span>
         </div>
 
         <div class="mob-meny__info-row">
@@ -132,15 +132,19 @@
           </div>
 
           <div class="header__contacts">
-            <a href="" class="header__contact">
-              <img src="../assets/images/max.png" alt="" />
-            </a>
-            <a href="" class="header__contact">
-              <img src="../assets/images/tg.png" alt="" />
+            <a
+              v-for="social in socialsMedia"
+              :key="social.id"
+              :href="social.link"
+              class="header__contact"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img :src="social.iconUrl" alt="" />
             </a>
           </div>
 
-          <a href="tel:+74952152551" class="header__phone">
+          <a :href="phoneHref" class="header__phone">
             <svg
               width="18"
               height="18"
@@ -153,7 +157,7 @@
                 fill="black"
               />
             </svg>
-            <span>+7 (495) 215-25-51</span>
+            <span>{{ headerData.phone }}</span>
           </a>
         </div>
       </div>
@@ -201,7 +205,7 @@
                 fill="#317844"
               />
             </svg>
-            <span>Москва, м. Коломенская, ул. Высокая, 4</span>
+            <span>{{ headerData.address }}</span>
           </div>
 
           <div class="header__time">
@@ -305,7 +309,7 @@
               </defs>
             </svg>
 
-            <span>ежедневно 9:00–21:00</span>
+            <span>{{ headerData.timeWork }}</span>
           </div>
         </div>
 
@@ -333,16 +337,19 @@
           </div>
 
           <div class="header__contacts">
-            <a href="" class="header__contact">
-              <img src="../assets/images/max.png" alt="" />
-            </a>
-
-            <a href="" class="header__contact">
-              <img src="../assets/images/tg.png" alt="" />
+            <a
+              v-for="social in socialsMedia"
+              :key="social.id"
+              :href="social.link"
+              class="header__contact"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img :src="social.iconUrl" alt="" />
             </a>
           </div>
 
-          <a href="tel:+74952152551" class="header__phone">
+          <a :href="phoneHref" class="header__phone">
             <svg
               width="18"
               height="18"
@@ -356,7 +363,7 @@
               />
             </svg>
 
-            <span>+7 (495) 215-25-51</span>
+            <span>{{ headerData.phone }}</span>
           </a>
         </div>
       </div>
@@ -366,7 +373,7 @@
         <div class="container">
           <div class="header__down-left">
             <NuxtLink to="/" href="" class="header__logo" >
-              <img src="../assets/images/header-logo.png" alt="" />
+              <img :src="logoUrl" alt="" />
             </NuxtLink>
 
             <nuv class="header__nav">
@@ -445,7 +452,7 @@
     <div class="header__mob">
       <div class="container">
         <a href="" class="header__mob-logo">
-          <img src="../assets/images/header-logo.png" alt="" />
+          <img :src="logoUrl" alt="" />
         </a>
         <div class="header__mob-right">
           <div class="header__mob-ic">
@@ -528,6 +535,83 @@
 
   const config = useRuntimeConfig();
   const strapiUrl = config.public.strapiUrl;
+
+  const defaultHeaderData = {
+    address: 'Москва, м. Коломенская, ул. Высокая, 4',
+    timeWork: 'ежедневно 9:00–21:00',
+    phone: '+7 (495) 215-25-51',
+    phoneLink: '+74952152551',
+  };
+  const defaultLogoUrl = new URL('../assets/images/header-logo.png', import.meta.url).href;
+
+  const { data: headerResponse } = useFetch(`${strapiUrl}/api/header-component`, {
+    query: {
+      'fields[0]': 'address',
+      'fields[1]': 'time_work',
+      'fields[2]': 'phone',
+      'fields[3]': 'phone_link',
+      'populate[socials_media][populate][icon]': true,
+      'populate[header_logo]': true,
+    },
+  });
+
+  const headerAttributes = computed(() => {
+    return headerResponse.value?.data?.attributes ?? headerResponse.value?.data ?? {};
+  });
+
+  const headerData = computed(() => ({
+    address: headerAttributes.value.address || defaultHeaderData.address,
+    timeWork: headerAttributes.value.time_work || defaultHeaderData.timeWork,
+    phone: headerAttributes.value.phone || defaultHeaderData.phone,
+    phoneLink: headerAttributes.value.phone_link || defaultHeaderData.phoneLink,
+  }));
+
+  function getStrapiMediaUrl(media) {
+    const source = media?.data?.attributes ?? media?.data ?? media;
+    const url = source?.url;
+
+    if (!url) {
+      return '';
+    }
+
+    if (/^https?:\/\//i.test(url)) {
+      return url;
+    }
+
+    return `${strapiUrl}${url}`;
+  }
+
+  const socialsMedia = computed(() => {
+    const items = headerAttributes.value.socials_media ?? [];
+
+    return items
+      .map((item, index) => {
+        const attrs = item?.attributes ?? item ?? {};
+        const link = attrs.link;
+        const iconUrl = getStrapiMediaUrl(attrs.icon);
+
+        return {
+          id: item?.id ?? `social-${index}`,
+          link,
+          iconUrl,
+        };
+      })
+      .filter((item) => item.link && item.iconUrl);
+  });
+
+  const phoneHref = computed(() => {
+    const value = headerData.value.phoneLink;
+
+    if (!value) {
+      return `tel:${defaultHeaderData.phoneLink}`;
+    }
+
+    return value.startsWith('tel:') ? value : `tel:${value}`;
+  });
+
+  const logoUrl = computed(() => {
+    return getStrapiMediaUrl(headerAttributes.value.header_logo) || defaultLogoUrl;
+  });
 
   const { data: directionsResponse } = useFetch(`${strapiUrl}/api/directions`, {
     query: {
